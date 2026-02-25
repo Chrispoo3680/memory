@@ -8,8 +8,8 @@ img {
 }
 body {
   height: 100vh;
+  background-color: var(--main-color);
 }
-
 header {
   display: flex;
   justify-content: space-between;

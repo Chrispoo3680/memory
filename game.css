@@ -7,14 +7,24 @@ section:first-of-type {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--main-color);
+  padding-block: 50px;
 }
 .memorycontainer {
-  border: 2px solid black;
-  width: 1100px;
-  height: 800px;
-  background-color: white;
+  display: grid;
+  grid-template-columns: repeat(4, 175px);
+  grid-template-rows: repeat(4, 175px);
+  justify-items: center;
+  align-items: center;
+  gap: 15px;
+  border-radius: 30px;
+  width: fit-content;
+  background-color: rgba(0, 0, 0, 0.471);
 }
+/* .memorycontainer > div {
+  border: 1px solid black;
+  width: 180px;
+  height: 180px;
+} */
 .card img {
   display: none;
 }
