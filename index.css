@@ -44,7 +44,7 @@ h1 {
 .default {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 20px;
+    padding: 10px;
 }
 
 .default>p {
@@ -60,6 +60,7 @@ button {
 .click {
     flex-direction: column;
     display: none;
+    margin-top: 30px;
 }
 
 .click>div {
