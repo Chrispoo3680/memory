@@ -4,9 +4,8 @@
 
 - Hovedside
   - Start spill
-  - Velge vannskelighetsgrad
-  - Se stats (rekorder etc.)
+  - Velge vannskelighetsgrad (størrelse på brett, hvor ulike bildene er, hvor lenge man kan se på bildene, etc.)
+  - Se stats (rekorder, etc.)
 - Spill
-  - Kort (bilder + styling)
+  - Kort, bakgrunn og UI (bilder + styling)
   - Logikk
-  - Utseende
