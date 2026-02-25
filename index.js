@@ -8,5 +8,12 @@ clickButton.addEventListener("click", klikk)
 
 function klikk() {
     const clickElm = document.querySelector(".click")
-    clickElm.style.display = "block"
+    if (clickElm.style.display === "block") {
+        clickElm.style.display = "none"
+    }
+
+    else {
+        clickElm.style.display = "block"
+    }
+
 }
