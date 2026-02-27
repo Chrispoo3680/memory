@@ -1,12 +1,6 @@
-i {
-  font-size: 30px;
-  transition: all 0.3s ease;
-}
-
-i:hover {
-  color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  transform: scale(1.1);
+body {
+  display: flex;
+  flex-direction: column;
 }
 
 section {
@@ -15,6 +9,7 @@ section {
   align-items: center;
   justify-content: center;
   gap: 50px;
+  margin-top: 40px;
 }
 
 h1 {
@@ -22,16 +17,11 @@ h1 {
   letter-spacing: 3px;
 }
 
-nav {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
 .levels {
   max-width: 400px;
   padding: 20px;
-  border: 3px solid black;
+  border-radius: 20px;
+  border: 3px double black;
 }
 
 .default {
@@ -49,6 +39,12 @@ button {
   padding: 20px;
   font-size: 30px;
   max-width: 400px;
+  border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  transform: scale(1.1);
 }
 
 .click {
@@ -58,6 +54,7 @@ button {
   align-items: center;
   flex-direction: column;
   gap: 20px;
+
 }
 
 .click>div {
@@ -67,7 +64,11 @@ button {
   text-align: center;
   border-radius: 10px;
   letter-spacing: 1px;
+  transition: all 0.3s ease;
+}
 
+.click>div:hover {
+  transform: scale(1.1);
 }
 
 .easy {
@@ -86,4 +87,25 @@ button {
   background-color: red;
   color: rgb(235, 134, 134);
   border: 3px solid rgb(235, 134, 134);
+}
+
+h3 {
+  font-size: 25px;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+
+footer>div>a {
+  font-size: 16px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+footer>div>a:hover {
+  transform: scale(1.1);
+  text-decoration: underline;
+}
+
+body.moon .levels {
+  border: 3px double white;
 }

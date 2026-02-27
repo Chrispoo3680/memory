@@ -43,3 +43,16 @@ const startButton = document.getElementById("start-button");
 startButton.addEventListener("click", () => {
   window.location.href = `game.html?boardWidth=${boardWidth}&boardHeight=${boardHeight}&viewTime=${viewTime}`;
 });
+
+const moonBtn = document.getElementById("moon");
+const sunBtn = document.getElementById("sun");
+
+moonBtn.addEventListener("click", function changemoon() {
+  document.body.classList.toggle("moon");
+  document.body.classList.remove("sun");
+});
+
+sunBtn.addEventListener("click", function changesun() {
+  document.body.classList.toggle("sun");
+  document.body.classList.remove("moon");
+});
