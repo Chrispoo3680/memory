@@ -9,13 +9,14 @@
 } */
 
 body {
-  height: 100vh;
+  height: 100%;
   background-image: url(https://wallpapers.com/images/hd/black-and-white-comic-1080-x-1080-wallpaper-cvmghz9yqjabvzdd.jpg);
 }
 main {
   background-color: rgba(66, 18, 66, 0.844);
   background-size: cover;
-  height: 100%;
+  
+
 }
 
 section:first-of-type {
