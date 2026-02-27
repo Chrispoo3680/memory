@@ -15,9 +15,19 @@ body {
 
 section:first-of-type {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   padding-block: 50px;
+}
+h1 {
+  font-family: "DynaPuff", system-ui;
+  font-optical-sizing: auto;
+  font-size: 250px;
+  font-weight: 700;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+  color: yellow;
 }
 
 #memory-container {
@@ -28,7 +38,8 @@ section:first-of-type {
   grid-template-rows: repeat(4, 175px); */
   justify-items: center;
   align-items: center;
-  gap: 15px;
+  padding: 40px;
+  gap: 10px;
   border-radius: 20px;
   background-color: rgba(0, 0, 0, 0.471);
 }
@@ -44,7 +55,9 @@ section:first-of-type {
   height: 100%;
   border: 1px solid black;
   border-radius: 10px;
-  background-color: white;
+  background-image: url(https://media.istockphoto.com/id/1186111736/vector/question-mark-and-exclamation-point-blue-signs-on-yellow-comic-banner-in-pop-art-style-vector.jpg?s=612x612&w=0&k=20&c=4UUN2cDXwzqf5XuI_-mzhhwTgmoCppZxA3MpzMjvajI=);
+  background-size: cover;
+  background-position: center center;
   display: flex;
   justify-content: center;
   align-items: center;
