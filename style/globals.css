@@ -52,6 +52,15 @@ i:hover {
   transform: scale(1.1);
 }
 
+footer {
+  display: flex;
+  flex-direction: column;
+  background-color: rgb(59, 17, 59);
+  border-top: 2px solid black;
+  margin-top: auto;
+  padding: 20px;
+}
+
 body.moon {
   background-color: black;
 }
