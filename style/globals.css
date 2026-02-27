@@ -1,16 +1,20 @@
 @import url("https://fonts.googleapis.com/css2?family=DynaPuff:wght@700&display=swap");
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
 img {
   width: 100%;
 }
+
 body {
   height: 100vh;
   background-color: var(--main-color);
 }
+
 header {
   display: flex;
   justify-content: space-between;
@@ -18,10 +22,29 @@ header {
   padding: 20px;
   border: 2px solid black;
 }
+
 h1 {
   font-size: 60px;
   letter-spacing: 3px;
 }
+
 :root {
   --main-color: rgb(72, 33, 72);
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+i {
+  font-size: 30px;
+  transition: all 0.3s ease;
+}
+
+i:hover {
+  color: rgb(150, 143, 143);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  transform: scale(1.1);
 }

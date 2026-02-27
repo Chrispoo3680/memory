@@ -8,10 +8,13 @@
   width: 100%;
 } */
 
+
+
 body {
   height: 100vh;
   background-color: var(--main-color);
 }
+
 
 section:first-of-type {
   display: flex;
@@ -20,6 +23,7 @@ section:first-of-type {
   align-items: center;
   padding-block: 50px;
 }
+
 h1 {
   font-family: "DynaPuff", system-ui;
   font-optical-sizing: auto;
