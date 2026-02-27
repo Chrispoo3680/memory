@@ -36,8 +36,7 @@ h1 {
 
 #memory-container {
   display: grid;
-  width: 1200px;
-  height: 600px;
+  width: fit-content;
   /* grid-template-columns: repeat(4, 175px);
   grid-template-rows: repeat(4, 175px); */
   justify-items: center;
@@ -48,11 +47,11 @@ h1 {
   background-color: rgba(0, 0, 0, 0.471);
 }
 
-/* #memory-container > div {
+#memory-container > div {
   border: 1px solid black;
   width: 180px;
   height: 180px;
-} */
+}
 
 .card {
   width: 100%;
