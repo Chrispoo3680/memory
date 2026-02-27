@@ -4,6 +4,7 @@ section {
   align-items: center;
   justify-content: center;
   gap: 50px;
+  margin-top: 40px;
 }
 
 h1 {
@@ -34,6 +35,11 @@ button {
   font-size: 30px;
   max-width: 400px;
   border-radius: 20px;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  transform: scale(1.1);
 }
 
 .click {
@@ -76,4 +82,8 @@ button {
   background-color: red;
   color: rgb(235, 134, 134);
   border: 3px solid rgb(235, 134, 134);
+}
+
+body.moon .levels {
+  border: 3px double white;
 }

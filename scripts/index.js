@@ -10,3 +10,20 @@ function klikk() {
     clickElm.style.display = "flex";
   }
 }
+
+const moonBtn = document.getElementById("moon")
+const sunBtn = document.getElementById("sun")
+
+moonBtn.addEventListener("click",
+  function changemoon() {
+    document.body.classList.toggle("moon")
+  }
+)
+
+sunBtn.addEventListener("click",
+  function changesun() {
+    document.body.classList.toggle("sun")
+  }
+)
+
+

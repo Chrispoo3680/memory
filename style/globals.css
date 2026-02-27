@@ -20,7 +20,6 @@ header {
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  border: 2px solid black;
 }
 
 h1 {
@@ -31,6 +30,7 @@ h1 {
 :root {
   --main-color: rgb(72, 33, 72);
 }
+
 
 nav {
   display: flex;
@@ -51,4 +51,21 @@ i:hover {
   color: rgb(150, 143, 143);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   transform: scale(1.1);
+}
+
+body.moon {
+  background-color: black;
+}
+
+body.moon p,
+body.moon h1,
+body.moon h2,
+body.moon h3,
+body.moon i,
+body.moon a {
+  color: white;
+}
+
+body.sun{
+  
 }
