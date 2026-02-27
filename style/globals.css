@@ -49,7 +49,6 @@ a {
 
 i:hover {
   color: rgb(150, 143, 143);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
   transform: scale(1.1);
 }
 
@@ -66,6 +65,15 @@ body.moon a {
   color: white;
 }
 
-body.sun{
-  
+body.sun {
+  background-color: rgb(244, 191, 244);
+}
+
+body.sun p,
+body.sun h1,
+body.sun h2,
+body.sun h3,
+body.sun i,
+body.sun a {
+  color: white;
 }

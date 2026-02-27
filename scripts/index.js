@@ -17,12 +17,14 @@ const sunBtn = document.getElementById("sun")
 moonBtn.addEventListener("click",
   function changemoon() {
     document.body.classList.toggle("moon")
+    document.body.classList.remove("sun")
   }
 )
 
 sunBtn.addEventListener("click",
   function changesun() {
     document.body.classList.toggle("sun")
+    document.body.classList.remove("moon")
   }
 )
 
