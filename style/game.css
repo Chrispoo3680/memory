@@ -8,22 +8,25 @@
   width: 100%;
 } */
 
-
-
 body {
   height: 100vh;
-  background-color: var(--main-color);
+  background-image: url(https://wallpapers.com/images/hd/black-and-white-comic-1080-x-1080-wallpaper-cvmghz9yqjabvzdd.jpg);
 }
-
+main {
+  background-color: rgba(66, 18, 66, 0.844);
+  background-size: cover;
+}
 
 section:first-of-type {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding-block: 50px;
 }
-
+section > img {
+  width: 500px;
+  margin-block: 30px;
+}
 h1 {
   font-family: "DynaPuff", system-ui;
   font-optical-sizing: auto;
@@ -36,8 +39,7 @@ h1 {
 
 #memory-container {
   display: grid;
-  width: 1200px;
-  height: 600px;
+  width: fit-content;
   /* grid-template-columns: repeat(4, 175px);
   grid-template-rows: repeat(4, 175px); */
   justify-items: center;
@@ -48,11 +50,11 @@ h1 {
   background-color: rgba(0, 0, 0, 0.471);
 }
 
-/* #memory-container > div {
+#memory-container > div {
   border: 1px solid black;
   width: 180px;
   height: 180px;
-} */
+}
 
 .card {
   width: 100%;
