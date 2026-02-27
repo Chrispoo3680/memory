@@ -25,7 +25,7 @@ section:first-of-type {
 }
 section > img {
   width: 500px;
-  margin-block: 30px;
+  margin-bottom: 30px;
 }
 h1 {
   font-family: "DynaPuff", system-ui;
@@ -51,9 +51,8 @@ h1 {
 }
 
 #memory-container > div {
-  border: 1px solid black;
-  width: 180px;
-  height: 180px;
+  width: 150px;
+  height: 150px;
 }
 
 .card {
@@ -69,6 +68,10 @@ h1 {
   align-items: center;
   cursor: pointer;
   overflow: hidden;
+  transition: 0.2s;
+}
+.card:hover {
+  transform: scale(1.05);
 }
 
 .card img {
