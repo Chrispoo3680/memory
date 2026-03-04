@@ -6,7 +6,18 @@
     background-size: cover;
 }
 
-.historysection{
-    font-display: flex;
+.historysection {
+    display: flex;
     justify-content: space-between;
+    gap: 60px;
+    padding: 75px;
+}
+
+.historysection>img {
+    width: 50%;
+}
+
+.historysection p {
+    font-size: 20px;
+    line-height: 1.5;
 }
