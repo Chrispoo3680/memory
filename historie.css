@@ -1,0 +1,12 @@
+.topsection {
+    width: 100%;
+    background-image: url(assets/images/history_brain.png);
+    background-position: center;
+    height: 600px;
+    background-size: cover;
+}
+
+.historysection{
+    font-display: flex;
+    justify-content: space-between;
+}
