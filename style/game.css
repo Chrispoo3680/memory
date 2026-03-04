@@ -13,12 +13,10 @@ body {
   background-image: url(https://wallpapers.com/images/hd/black-and-white-comic-1080-x-1080-wallpaper-cvmghz9yqjabvzdd.jpg);
 }
 main {
-  background-color: rgba(66, 18, 66, 0.844);
+  background-color: #421242d7;
+  /*   background-color: #000000d7; */
   background-size: cover;
-  
-
 }
-
 section:first-of-type {
   display: flex;
   flex-direction: column;
@@ -49,7 +47,7 @@ h1 {
   padding: 40px;
   gap: 10px;
   border-radius: 20px;
-  background-color: rgba(0, 0, 0, 0.471);
+  background-color: #00000078;
 }
 
 #memory-container > div {
@@ -62,7 +60,7 @@ h1 {
   height: 100%;
   border: 1px solid black;
   border-radius: 10px;
-  background-image: url(https://media.istockphoto.com/id/1186111736/vector/question-mark-and-exclamation-point-blue-signs-on-yellow-comic-banner-in-pop-art-style-vector.jpg?s=612x612&w=0&k=20&c=4UUN2cDXwzqf5XuI_-mzhhwTgmoCppZxA3MpzMjvajI=);
+  background-image: url(../assets/images/question.png);
   background-size: cover;
   background-position: center center;
   display: flex;

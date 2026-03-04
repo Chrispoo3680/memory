@@ -44,7 +44,7 @@ startButton.addEventListener("click", () => {
   window.location.href = `game.html?boardWidth=${boardWidth}&boardHeight=${boardHeight}&viewTime=${viewTime}`;
 });
 
-const moonBtn = document.getElementById("moon");
+/* const moonBtn = document.getElementById("moon");
 const sunBtn = document.getElementById("sun");
 
 moonBtn.addEventListener("click", function changemoon() {
@@ -56,3 +56,24 @@ sunBtn.addEventListener("click", function changesun() {
   document.body.classList.toggle("sun");
   document.body.classList.remove("moon");
 });
+ */
+navElm = document.querySelector("nav");
+sunElm = document.getElementById("sun");
+moonElm = document.getElementById("moon");
+houseElm = document.querySelector(".fa-house");
+sunElm.classList.add("none");
+navElm.onclick = function () {
+  sunElm.classList.toggle("none");
+  moonElm.classList.toggle("none");
+  if (moonElm.classList.contains("none")) {
+    sunElm.style.color = "#968f8f";
+    moonElm.style.color = "#968f8f";
+    houseElm.style.color = "#968f8f";
+    document.body.style.backgroundColor = "#282828";
+  } else {
+    sunElm.style.color = "#e2a4ec";
+    moonElm.style.color = "#e2a4ec";
+    houseElm.style.color = "#e2a4ec";
+    document.body.style.backgroundColor = "#482148";
+  }
+};
