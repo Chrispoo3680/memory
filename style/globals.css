@@ -5,16 +5,14 @@
   padding: 0;
   box-sizing: border-box;
 }
-
-img {
-  width: 100%;
+html {
+  background-color: black;
 }
 
 body {
-  height: 100vh;
   background-color: #482148;
+  overflow-x: hidden;
 }
-
 
 .indexheader {
   flex-direction: column;
@@ -28,7 +26,8 @@ body {
 }
 
 .logo img {
-  width: 200px;
+  width: 100%;
+  max-width: 200px;
   border-radius: 100%;
   overflow: hidden;
 }
