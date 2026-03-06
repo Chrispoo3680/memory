@@ -1,6 +1,21 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Memory</title>
+    <link rel="stylesheet" href="style/index.css" />
+    <link rel="stylesheet" href="style/globals.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+      integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
 
+<<<<<<< HEAD
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -37,24 +52,51 @@
       <div class="default">
         <p>Velg vansklighetsgrad</p>
         <i id="button" class="fa-solid fa-bars"></i>
+=======
+  <body>
+    <header class="indexheader">
+      <div class="headertop">
+        <a href="index.html"><i class="fa-regular fa-house"></i></a>
+        <div class="logo">
+          <img src="assets/images/memorylogopurple2.png" alt="" />
+        </div>
+        <nav>
+          <i id="sun" class="fa-regular fa-sun"></i>
+          <i id="moon" class="fa-regular fa-moon"></i>
+        </nav>
+>>>>>>> 8f9b48bf4efd2b9235053ed0c73b4282c69e7bfc
       </div>
-      <div class="click">
-        <div class="easy" onclick="setDifficulty('easy')">Lett</div>
-        <div class="medium" onclick="setDifficulty('medium')">Medium</div>
-        <div class="hard" onclick="setDifficulty('hard')">Vanskelig</div>
+      <div class="headerbottom">
+        <a href="historie.html">Historie</a>
+        <a href="spillguide.html">Spillguide</a>
+        <a href="">Rekorder</a>
       </div>
-    </div>
-    <button id="start-button">Start</button>
-  </section>
+    </header>
 
-  <footer>
-    <div>
-      <h3>Om oss</h3>
-      <a href="https://github.com/Chrispoo3680/memory">Lenke til gthub</a>
-    </div>
-  </footer>
+    <section>
+      <img src="assets/images/VelkommenBig.png" alt="" />
+      <div class="levels">
+        <div class="default">
+          <p>Velg nivå</p>
+          <i id="button" class="fa-solid fa-bars"></i>
+        </div>
+        <div class="click">
+          <div class="easy" onclick="setDifficulty('easy')">LETT</div>
+          <div class="medium" onclick="setDifficulty('medium')">MEDIUM</div>
+          <div class="hard" onclick="setDifficulty('hard')">VANSKELIG</div>
+        </div>
+      </div>
 
-  <script src="scripts/index.js"></script>
-</body>
+      <img id="start-button" src="assets/images/playbutton.png" />
+    </section>
+<!-- 
+    <footer>
+      <div>
+        <h3>Om oss</h3>
+        <a href="https://github.com/Chrispoo3680/memory">Lenke til gthub</a>
+      </div>
+    </footer> -->
 
+    <script src="scripts/index.js"></script>
+  </body>
 </html>

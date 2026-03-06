@@ -1,6 +1,11 @@
+@import url("https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap");
 body {
   display: flex;
   flex-direction: column;
+  font-family: "Cherry Bomb One", system-ui;
+  font-weight: 100;
+  font-style: normal;
+  cursor: default;
 }
 
 section {
@@ -8,30 +13,49 @@ section {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding-block: 80px;
   gap: 50px;
-  margin-top: 40px;
+  background-image: url(../assets/images/gamecatalog.png);
+  background-position: center center;
+  background-size: cover;
 }
-
+header {
+  background-color: white;
+}
 h1 {
   font-size: 60px;
   letter-spacing: 3px;
 }
-
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-block: 35px;
+  padding-inline: 60px;
+  box-shadow: 0 0 700px;
+  z-index: 1;
+}
+section img {
+  max-width: 700px;
+  z-index: 2;
+}
 .levels {
   max-width: 400px;
   padding: 20px;
   border-radius: 20px;
-  border: 3px double black;
+  border: 3px solid white;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.473);
 }
 
 .default {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
   padding: 10px;
   gap: 20px;
 }
 
-.default>p {
+.default > p {
   font-size: 30px;
 }
 
@@ -41,6 +65,7 @@ button {
   max-width: 400px;
   border-radius: 20px;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
 button:hover {
@@ -51,13 +76,21 @@ button:hover {
   display: none;
   margin-top: 30px;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
   flex-direction: column;
   gap: 20px;
-
 }
-
-.click>div {
+#start-button {
+  cursor: pointer;
+  max-width: 100px;
+  margin: 0;
+  filter: invert(1);
+  transition: 0.2s;
+}
+#start-button:hover {
+  transform: scale(1.08);
+}
+.click > div {
   min-width: 50%;
   font-size: 25px;
   padding: 10px;
@@ -65,9 +98,10 @@ button:hover {
   border-radius: 10px;
   letter-spacing: 1px;
   transition: all 0.3s ease;
+  cursor: pointer;
 }
 
-.click>div:hover {
+.click > div:hover {
   transform: scale(1.1);
 }
 
@@ -78,11 +112,13 @@ button:hover {
 }
 
 .medium {
-  background-color: rgb(234, 220, 20);
-  color: rgb(228, 231, 176);
+  background-color: rgb(255, 140, 0);
+  color: rgb(252, 202, 147);
   border: 3px solid white;
 }
-
+i {
+  color: #c832df;
+}
 .hard {
   background-color: red;
   color: rgb(235, 134, 134);
@@ -95,13 +131,13 @@ h3 {
   margin-bottom: 10px;
 }
 
-footer>div>a {
+footer > div > a {
   font-size: 16px;
   text-decoration: none;
   transition: all 0.3s ease;
 }
 
-footer>div>a:hover {
+footer > div > a:hover {
   transform: scale(1.1);
   text-decoration: underline;
 }

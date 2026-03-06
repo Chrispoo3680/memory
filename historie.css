@@ -1,23 +1,33 @@
 .topsection {
-    width: 100%;
-    background-image: url(assets/images/history_brain.png);
-    background-position: center;
-    height: 600px;
-    background-size: cover;
+  width: 100%;
+  background-image: url(assets/images/history_brain.png);
+  background-position: center;
+  height: 600px;
+  background-size: cover;
 }
 
 .historysection {
-    display: flex;
-    justify-content: space-between;
-    gap: 60px;
-    padding: 75px;
+  display: flex;
+  justify-content: space-between;
+  gap: 60px;
+  padding: 75px;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-block: 35px;
+  padding-inline: 60px;
 }
 
-.historysection>img {
-    width: 50%;
+.historysection > img {
+  width: 50%;
 }
 
 .historysection p {
-    font-size: 20px;
-    line-height: 1.5;
+  font-size: 20px;
+  line-height: 1.5;
+}
+header {
+  background-color: white;
 }
