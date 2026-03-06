@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=DynaPuff:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap");
 
 * {
   margin: 0;
@@ -12,6 +13,7 @@ html {
 body {
   background-color: #482148;
   overflow-x: hidden;
+  font-family: "Cherry Bomb One", system-ui;
 }
 
 .indexheader {
@@ -41,13 +43,13 @@ body {
   width: 50%;
 }
 
-.headerbottom > a {
+.headerbottom>a {
   font-size: 20px;
   text-decoration: none;
   transition: all 0.3s ease;
 }
 
-.headerbottom > a:hover {
+.headerbottom>a:hover {
   text-decoration: underline solid rgb(150, 143, 143);
   text-underline-offset: 4px;
   transform: scale(1.05);
@@ -70,9 +72,11 @@ i {
   /* color: #968f8f; */
   cursor: pointer;
 }
+
 i:hover {
   transform: scale(1.1);
 }
+
 a {
   color: black;
 }
@@ -111,6 +115,7 @@ body.sun i,
 body.sun a {
   color: white;
 }
+
 .none {
   display: none !important;
 }
