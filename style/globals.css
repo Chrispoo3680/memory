@@ -18,6 +18,9 @@ body {
 
 .indexheader {
   flex-direction: column;
+  position: relative;
+  box-shadow: 0 0 700px;
+  z-index: 1;
 }
 
 .headertop {

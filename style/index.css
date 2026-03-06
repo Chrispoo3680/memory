@@ -43,7 +43,6 @@ header {
   align-items: center;
   padding-block: 35px;
   padding-inline: 60px;
-  box-shadow: 0 0 700px;
   z-index: 1;
 }
 section img:first-child {
