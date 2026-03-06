@@ -43,13 +43,13 @@ body {
   width: 50%;
 }
 
-.headerbottom>a {
+.headerbottom > a {
   font-size: 20px;
   text-decoration: none;
   transition: all 0.3s ease;
 }
 
-.headerbottom>a:hover {
+.headerbottom > a:hover {
   text-decoration: underline solid rgb(150, 143, 143);
   text-underline-offset: 4px;
   transform: scale(1.05);
@@ -118,4 +118,12 @@ body.sun a {
 
 .none {
   display: none !important;
+}
+/*     div.style.backgroundColor = "white";
+    div.style.color = "goldenrod";
+    div.style.border = "3px solid goldenrod"; */
+.chosen {
+  background-color: white;
+  color: goldenrod;
+  border: 3px solid goldenrod;
 }

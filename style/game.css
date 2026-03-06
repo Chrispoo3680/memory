@@ -14,7 +14,6 @@ body {
 }
 main {
   background-color: #421242d7;
-  /*   background-color: #000000d7; */
   background-size: cover;
   height: 100%;
 }
@@ -87,6 +86,7 @@ h1 {
 }
 
 .card img {
+  width: 100%;
   display: none;
 }
 

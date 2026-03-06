@@ -44,19 +44,6 @@ startButton.addEventListener("click", () => {
   window.location.href = `game.html?boardWidth=${boardWidth}&boardHeight=${boardHeight}&viewTime=${viewTime}`;
 });
 
-/* const moonBtn = document.getElementById("moon");
-const sunBtn = document.getElementById("sun");
-
-moonBtn.addEventListener("click", function changemoon() {
-  document.body.classList.toggle("moon");
-  document.body.classList.remove("sun");
-});
-
-sunBtn.addEventListener("click", function changesun() {
-  document.body.classList.toggle("sun");
-  document.body.classList.remove("moon");
-});
- */
 navElm = document.querySelector("nav");
 sunElm = document.getElementById("sun");
 moonElm = document.getElementById("moon");
@@ -81,3 +68,17 @@ navElm.onclick = function () {
       "assets/images/VelkommenBig.png";
   }
 };
+
+const optionElms = document.querySelectorAll(".levels div div");
+const easyElm = document.querySelector(".easy");
+const mediumElm = document.querySelector(".medium");
+const hardElm = document.querySelector(".hard");
+
+optionElms.forEach(function (div) {
+  div.addEventListener("click", function () {
+    easyElm.classList.remove("chosen");
+    mediumElm.classList.remove("chosen");
+    hardElm.classList.remove("chosen");
+    div.classList.add("chosen");
+  });
+});
