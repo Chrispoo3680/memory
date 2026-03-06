@@ -16,6 +16,7 @@ main {
   background-color: #421242d7;
   /*   background-color: #000000d7; */
   background-size: cover;
+  height: 100%;
 }
 section:first-of-type {
   display: flex;
@@ -23,6 +24,17 @@ section:first-of-type {
   justify-content: center;
   align-items: center;
 }
+i {
+  color: #e2a4ec;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 35px;
+  padding-inline: 60px;
+}
+
 section > img {
   width: 500px;
   margin-bottom: 30px;

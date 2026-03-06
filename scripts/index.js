@@ -36,7 +36,7 @@ function setDifficulty(level) {
 }
 
 let boardWidth = 4;
-let boardHeight = 4;
+let boardHeight = 3;
 let viewTime = 1;
 
 const startButton = document.getElementById("start-button");
@@ -66,14 +66,18 @@ navElm.onclick = function () {
   sunElm.classList.toggle("none");
   moonElm.classList.toggle("none");
   if (moonElm.classList.contains("none")) {
-    sunElm.style.color = "#968f8f";
-    moonElm.style.color = "#968f8f";
-    houseElm.style.color = "#968f8f";
-    document.body.style.backgroundColor = "#282828";
+    document.querySelector(".indexheader").style.backgroundColor = "#16002d";
+    document.querySelector(".headerbottom").style.filter = "invert(1)";
+    document.querySelector("section").style.backgroundImage =
+      "url(assets/images/gamecatalog2.png)";
+    document.querySelector("section img").src =
+      "assets/images/VelkommenBigPurple.png";
   } else {
-    sunElm.style.color = "#e2a4ec";
-    moonElm.style.color = "#e2a4ec";
-    houseElm.style.color = "#e2a4ec";
-    document.body.style.backgroundColor = "#482148";
+    document.querySelector(".indexheader").style.backgroundColor = "white";
+    document.querySelector(".headerbottom").style.filter = "invert(0)";
+    document.querySelector("section").style.backgroundImage =
+      "url(assets/images/gamecatalog.png)";
+    document.querySelector("section img").src =
+      "assets/images/VelkommenBig.png";
   }
 };
