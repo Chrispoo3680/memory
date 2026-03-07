@@ -65,7 +65,10 @@ function getPlayerName() {
 async function createGame(pId, width, height) {
   const res = await fetch(`${SUPABASE_URL}/functions/v1/create-game`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      apikey: PUBLIC_ANON_KEY,
+    },
     body: JSON.stringify({
       playerId: pId,
       boardWidth: width,
@@ -109,7 +112,10 @@ async function joinGame(code, pId) {
 async function flipCard(cardId) {
   await fetch(`${SUPABASE_URL}/functions/v1/make-move`, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      apikey: PUBLIC_ANON_KEY,
+    },
     body: JSON.stringify({ code: gameCode, playerId, cardId }),
   });
 }
