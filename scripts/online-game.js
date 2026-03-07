@@ -55,6 +55,13 @@ function clearLobbyError() {
   lobbyError.classList.add("hidden");
 }
 
+function clearLobbyTimer() {
+  if (lobbyTimerId) {
+    clearTimeout(lobbyTimerId);
+    lobbyTimerId = null;
+  }
+}
+
 function getDisplayName() {
   return playerNameInput.value.trim() || "Anonymous";
 }
@@ -222,10 +229,12 @@ function subscribeToGame(code) {
 function handleGameUpdate(game) {
   // ── Terminal states that close the game ──────────────────────────────────
   if (game.status === "expired") {
+    clearLobbyTimer();
     closeGame("The game lobby expired after 10 minutes.");
     return;
   }
   if (game.status === "abandoned") {
+    clearLobbyTimer();
     closeGame("Your opponent left the game.");
     return;
   }
@@ -240,6 +249,7 @@ function handleGameUpdate(game) {
 
   // If the host is still on the lobby (waiting for player2), switch to game screen
   if (!gameScreen.classList.contains("hidden") === false) {
+    clearLobbyTimer();
     showGameScreen(game);
     return;
   }
@@ -258,6 +268,7 @@ function handleGameUpdate(game) {
  * Cleans up subscription and returns the player to the lobby with a message.
  */
 function closeGame(reason) {
+  clearLobbyTimer();
   if (realtimeChannel) {
     supabase.removeChannel(realtimeChannel);
     realtimeChannel = null;
@@ -394,6 +405,7 @@ function showGameScreen(game) {
 }
 
 function showLobby() {
+  clearLobbyTimer();
   gameScreen.classList.add("hidden");
   lobby.classList.remove("hidden");
   gameCodeDisplay.classList.add("hidden");
@@ -429,6 +441,16 @@ createBtn.addEventListener("click", async () => {
     gameCodeDisplay.classList.remove("hidden");
 
     subscribeToGame(gameCode);
+
+    // Client-side fallback: expire the lobby after 10 minutes if no one joins
+    lobbyTimerId = setTimeout(
+      async () => {
+        await leaveGame();
+        showLobby();
+        showLobbyError("Lobby expired — no one joined after 10 minutes.");
+      },
+      10 * 60 * 1000,
+    );
   } catch (err) {
     showLobbyError(err.message);
   } finally {
