@@ -224,11 +224,12 @@ function subscribeToGame(code) {
     )
     .subscribe();
 
-  // Polling fallback: if Realtime is blocked by RLS, poll every 3 s while waiting
+  // Polling fallback: covers both lobby (waiting for P2) and gameplay
+  // (in case Realtime postgres_changes is blocked by RLS).
   if (pollIntervalId) clearInterval(pollIntervalId);
   pollIntervalId = setInterval(async () => {
-    // Stop if we've already moved on
-    if (!gameCode || !gameScreen.classList.contains("hidden")) {
+    // Stop only when the game is fully torn down
+    if (!gameCode) {
       clearInterval(pollIntervalId);
       pollIntervalId = null;
       return;
@@ -238,12 +239,15 @@ function subscribeToGame(code) {
       .select("*")
       .eq("code", code)
       .maybeSingle();
-    if (data && data.status !== "waiting") {
+    if (!data) return;
+    handleGameUpdate(data);
+    // Stop polling for terminal states (closeGame/showResult handle cleanup)
+    const terminal = ["finished", "abandoned", "expired"];
+    if (terminal.includes(data.status)) {
       clearInterval(pollIntervalId);
       pollIntervalId = null;
-      handleGameUpdate(data);
     }
-  }, 3000);
+  }, 1500);
 }
 
 // ── Game update handler ───────────────────────────────────────────────────────
