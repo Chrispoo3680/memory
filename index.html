@@ -16,36 +16,48 @@
   </head>
 
   <body>
-    <header>
-      <i class="fa-solid fa-arrow-left"></i>
-      <nav>
-        <i id="sun" class="fa-regular fa-sun"></i>
-        <i id="moon" class="fa-regular fa-moon"></i>
-      </nav>
+    <header class="indexheader">
+      <div class="headertop">
+        <a href="index.html"><i class="fa-regular fa-house"></i></a>
+        <div class="logo">
+          <img src="assets/images/memorylogopurple2.png" alt="" />
+        </div>
+        <nav>
+          <i id="sun" class="fa-regular fa-sun"></i>
+          <i id="moon" class="fa-regular fa-moon"></i>
+        </nav>
+      </div>
+      <div class="headerbottom">
+        <a href="historie.html">Historie</a>
+        <a href="spillguide.html">Spillguide</a>
+        <a href="">Rekorder</a>
+      </div>
     </header>
 
     <section>
-      <h1>Velkommen til memoryspill!</h1>
+      <img src="assets/images/VelkommenBig.png" alt="" />
       <div class="levels">
         <div class="default">
-          <p>Velg vansklighetsgrad</p>
+          <p>Velg nivå</p>
           <i id="button" class="fa-solid fa-bars"></i>
         </div>
         <div class="click">
-          <div class="easy" onclick="setDifficulty('easy')">Lett</div>
-          <div class="medium" onclick="setDifficulty('medium')">Medium</div>
-          <div class="hard" onclick="setDifficulty('hard')">Vanskelig</div>
+          <div class="easy" onclick="setDifficulty('easy')">LETT</div>
+          <div class="medium" onclick="setDifficulty('medium')">MEDIUM</div>
+          <div class="hard" onclick="setDifficulty('hard')">VANSKELIG</div>
         </div>
       </div>
-      <button id="start-button">Start</button>
-    </section>
 
+      <img id="start-button" src="assets/images/playbutton.png" />
+      <img class="gradient" src="assets/images/blackgradient.png" alt="" />
+    </section>
+    <!-- 
     <footer>
       <div>
         <h3>Om oss</h3>
         <a href="https://github.com/Chrispoo3680/memory">Lenke til gthub</a>
       </div>
-    </footer>
+    </footer> -->
 
     <script src="scripts/index.js"></script>
   </body>

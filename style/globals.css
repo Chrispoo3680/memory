@@ -1,36 +1,67 @@
 @import url("https://fonts.googleapis.com/css2?family=DynaPuff:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap");
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
-img {
-  width: 100%;
+html {
+  background-color: black;
 }
 
 body {
-  height: 100vh;
-  background-color: var(--main-color);
+  background-color: #482148;
+  overflow-x: hidden;
+  font-family: "Cherry Bomb One", system-ui;
 }
 
-header {
+.indexheader {
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 0 700px;
+  z-index: 1;
+}
+
+.headertop {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  width: 100%;
+}
+
+.logo img {
+  width: 100%;
+  max-width: 200px;
+  border-radius: 100%;
+  overflow: hidden;
+}
+
+.headerbottom {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 20px;
+  width: 50%;
+}
+
+.headerbottom > a {
+  font-size: 20px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.headerbottom > a:hover {
+  text-decoration: underline solid rgb(150, 143, 143);
+  text-underline-offset: 4px;
+  transform: scale(1.05);
 }
 
 h1 {
   font-size: 60px;
   letter-spacing: 3px;
 }
-
-:root {
-  --main-color: rgb(72, 33, 72);
-}
-
 
 nav {
   display: flex;
@@ -41,15 +72,16 @@ nav {
 i {
   font-size: 30px;
   transition: all 0.3s ease;
+  /* color: #968f8f; */
+  cursor: pointer;
+}
+
+i:hover {
+  transform: scale(1.1);
 }
 
 a {
   color: black;
-}
-
-i:hover {
-  color: rgb(150, 143, 143);
-  transform: scale(1.1);
 }
 
 footer {
@@ -85,4 +117,21 @@ body.sun h3,
 body.sun i,
 body.sun a {
   color: white;
+}
+
+.none {
+  display: none !important;
+}
+/*     div.style.backgroundColor = "white";
+    div.style.color = "goldenrod";
+    div.style.border = "3px solid goldenrod"; */
+.chosen {
+  background-color: white;
+  color: goldenrod;
+  border: 3px solid goldenrod;
+}
+.chosen2 {
+  background-color: white;
+  color: rgb(214, 78, 214);
+  border: 3px solid rgb(214, 78, 214);
 }

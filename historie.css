@@ -1,0 +1,37 @@
+.topsection {
+  width: 100%;
+  background-image: url(assets/images/history_brain.png);
+  background-position: center;
+  height: 600px;
+  background-size: cover;
+}
+
+.historysection {
+  display: flex;
+  justify-content: space-between;
+  gap: 60px;
+  padding: 75px;
+  background-color: white;
+  box-shadow: 0 0 700px;
+  position: relative;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-block: 35px;
+  padding-inline: 60px;
+}
+
+.historysection > img {
+  max-width: 100%;
+}
+
+.historysection p {
+  font-size: 20px;
+  line-height: 1.5;
+}
+header {
+  background-color: white;
+}

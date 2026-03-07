@@ -1,0 +1,65 @@
+.topsection {
+    width: 100%;
+    background-image: url(assets/images/guide.png);
+    background-position: center;
+    height: 400px;
+    background-repeat: repeat-x;
+    background-position: contain;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-block: 35px;
+    padding-inline: 60px;
+}
+
+.aboutsection {
+    margin-bottom: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+}
+
+.aboutsection>div {
+    display: flex;
+    justify-content: space-between;
+    gap: 60px;
+    padding: 75px;
+}
+
+.guide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-image: url(assets/images/peopleplaying.png);
+    background-position: center;
+    background-size: cover;
+    height: 90vh;
+    filter: grayscale(80%) brightness(90%);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+    color: white;
+}
+
+.aboutsection p {
+    font-size: 20px;
+    line-height: 2;
+}
+
+h2 {
+    font-size: 50px;
+    margin-bottom: 10px;
+}
+
+ol {
+    font-size: 23px;
+    line-height: 3;
+}
+
+header {
+    background-color: white;
+}
