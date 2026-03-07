@@ -1,13 +1,25 @@
 const clickButton = document.getElementById("button");
+const optionElms = document.querySelectorAll(".levels div div");
+const easyElm = document.querySelector(".easy");
+const mediumElm = document.querySelector(".medium");
+const hardElm = document.querySelector(".hard");
+const navElm = document.querySelector("nav");
+const sunElm = document.getElementById("sun");
+const moonElm = document.getElementById("moon");
+const houseElm = document.querySelector(".fa-house");
 
 clickButton.addEventListener("click", klikk);
-
+document.querySelector("#start-button").classList.add("none");
 function klikk() {
   const clickElm = document.querySelector(".click");
   if (clickElm.style.display === "flex") {
     clickElm.style.display = "none";
+    document.getElementById("start-button").classList.add("none");
+    clickButton.classList.replace("fa-xmark", "fa-bars");
   } else {
     clickElm.style.display = "flex";
+    document.getElementById("start-button").classList.remove("none");
+    clickButton.classList.replace("fa-bars", "fa-xmark");
   }
 }
 
@@ -35,7 +47,7 @@ function setDifficulty(level) {
   }
 }
 
-let boardWidth = 4;
+let boardWidth = 6;
 let boardHeight = 3;
 let viewTime = 1;
 
@@ -44,10 +56,6 @@ startButton.addEventListener("click", () => {
   window.location.href = `game.html?boardWidth=${boardWidth}&boardHeight=${boardHeight}&viewTime=${viewTime}`;
 });
 
-navElm = document.querySelector("nav");
-sunElm = document.getElementById("sun");
-moonElm = document.getElementById("moon");
-houseElm = document.querySelector(".fa-house");
 sunElm.classList.add("none");
 navElm.onclick = function () {
   sunElm.classList.toggle("none");
@@ -68,17 +76,26 @@ navElm.onclick = function () {
       "assets/images/VelkommenBig.png";
   }
 };
-
-const optionElms = document.querySelectorAll(".levels div div");
-const easyElm = document.querySelector(".easy");
-const mediumElm = document.querySelector(".medium");
-const hardElm = document.querySelector(".hard");
-
 optionElms.forEach(function (div) {
   div.addEventListener("click", function () {
-    easyElm.classList.remove("chosen");
-    mediumElm.classList.remove("chosen");
-    hardElm.classList.remove("chosen");
-    div.classList.add("chosen");
+    if (sunElm.classList.contains("none")) {
+      easyElm.classList.remove("chosen");
+      mediumElm.classList.remove("chosen");
+      hardElm.classList.remove("chosen");
+      easyElm.classList.remove("chosen2");
+      mediumElm.classList.remove("chosen2");
+      hardElm.classList.remove("chosen2");
+      div.classList.remove("chosen2");
+      div.classList.add("chosen");
+    } else {
+      easyElm.classList.remove("chosen2");
+      mediumElm.classList.remove("chosen2");
+      hardElm.classList.remove("chosen2");
+      easyElm.classList.remove("chosen");
+      mediumElm.classList.remove("chosen");
+      hardElm.classList.remove("chosen");
+      div.classList.remove("chosen");
+      div.classList.add("chosen2");
+    }
   });
 });

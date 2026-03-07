@@ -130,3 +130,8 @@ body.sun a {
   color: goldenrod;
   border: 3px solid goldenrod;
 }
+.chosen2 {
+  background-color: white;
+  color: rgb(214, 78, 214);
+  border: 3px solid rgb(214, 78, 214);
+}
