@@ -10,10 +10,12 @@ const supabase = createClient(SUPABASE_URL, PUBLIC_ANON_KEY);
 // ── Game state ───────────────────────────────────────────────────────────────
 let playerId = null; // this player's UUID (from anonymous auth)
 let playerName = null; // this player's display name
+let authToken = null; // cached JWT for use in beforeunload
 let gameCode = null; // current game code
 let boardWidth = 4; // columns
 let boardHeight = 4; // rows
 let realtimeChannel = null;
+let lobbyTimerId = null; // client-side 10-min lobby expiry timer
 
 // ── DOM refs ─────────────────────────────────────────────────────────────────
 const lobby = document.getElementById("lobby");
