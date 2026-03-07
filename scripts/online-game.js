@@ -81,6 +81,7 @@ async function signIn(displayName) {
 
   playerId = session.user.id; // UUID
   playerName = displayName;
+  authToken = session.access_token;
 }
 
 /** Returns the current JWT for use in fetch Authorization headers. */
@@ -88,7 +89,8 @@ async function getAuthToken() {
   const {
     data: { session },
   } = await supabase.auth.getSession();
-  return session?.access_token ?? "";
+  authToken = session?.access_token ?? authToken; // keep cache fresh
+  return authToken ?? "";
 }
 
 // ── Server calls ─────────────────────────────────────────────────────────────
@@ -126,24 +128,24 @@ async function createGame(displayName, width, height) {
  * Joins an existing game by updating player2 and status.
  * Returns the full game row.
  */
+/**
+ * Joins an existing game via the join-game Edge Function.
+ * Server validates joinability, expiry, and self-join using the service role key.
+ */
 async function joinGame(code) {
-  // The authenticated user's UUID is set automatically by the Supabase client.
-  // RLS allows this update because status='waiting' and player2 is still null.
-  const { data, error } = await supabase
-    .from("games")
-    .update({ player2: playerId, player2_name: playerName, status: "playing" })
-    .eq("code", code)
-    .eq("status", "waiting")
-    .select()
-    .maybeSingle();
+  const token = await getAuthToken();
+  const res = await fetch(`${SUPABASE_URL}/functions/v1/join-game`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      apikey: PUBLIC_ANON_KEY,
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ code, displayName: playerName }),
+  });
 
-  if (error) {
-    throw new Error(error.message);
-  }
-  if (!data) {
-    throw new Error("Game not found or already started.");
-  }
-
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || `Server error ${res.status}`);
   return data;
 }
 
@@ -195,6 +197,16 @@ function subscribeToGame(code) {
 
 // ── Game update handler ───────────────────────────────────────────────────────
 function handleGameUpdate(game) {
+  // ── Terminal states that close the game ──────────────────────────────────
+  if (game.status === "expired") {
+    closeGame("The game lobby expired after 10 minutes.");
+    return;
+  }
+  if (game.status === "abandoned") {
+    closeGame("Your opponent left the game.");
+    return;
+  }
+
   const cards = game.board?.cards ?? [];
   const flipped = game.flipped ?? [];
   const width = game.board?.width ?? boardWidth;
@@ -216,6 +228,29 @@ function handleGameUpdate(game) {
   if (game.status === "finished") {
     showResult(cards, game);
   }
+}
+
+/**
+ * Called when the server terminates the game (expired / abandoned).
+ * Cleans up subscription and returns the player to the lobby with a message.
+ */
+function closeGame(reason) {
+  if (realtimeChannel) {
+    supabase.removeChannel(realtimeChannel);
+    realtimeChannel = null;
+  }
+  const code = gameCode;
+  gameCode = null;
+
+  // Show lobby
+  gameScreen.classList.add("hidden");
+  lobby.classList.remove("hidden");
+  gameCodeDisplay.classList.add("hidden");
+  resultOverlay.classList.add("hidden");
+
+  // Display reason to the player
+  showLobbyError(reason);
+  console.info(`Game ${code} closed: ${reason}`);
 }
 
 // ── Render ────────────────────────────────────────────────────────────────────
@@ -407,8 +442,27 @@ joinBtn.addEventListener("click", async () => {
   }
 });
 
-leaveBtn.addEventListener("click", () => {
+leaveBtn.addEventListener("click", async () => {
+  leaveBtn.disabled = true;
+  await leaveGame();
   showLobby();
+  leaveBtn.disabled = false;
+});
+
+// Notify the server if the player closes the tab or navigates away mid-game
+window.addEventListener("beforeunload", () => {
+  if (!gameCode || !authToken) return;
+  // fetch with keepalive runs even after the page starts unloading
+  fetch(`${SUPABASE_URL}/functions/v1/leave-game`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      apikey: PUBLIC_ANON_KEY,
+      Authorization: `Bearer ${authToken}`,
+    },
+    body: JSON.stringify({ code: gameCode }),
+    keepalive: true,
+  });
 });
 
 playAgainBtn.addEventListener("click", () => {

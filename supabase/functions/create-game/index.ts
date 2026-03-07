@@ -122,6 +122,7 @@ Deno.serve(async (req: Request) => {
       current_turn: user.id,
       lock: false,
       status: "waiting",
+      expires_at: new Date(Date.now() + 10 * 60 * 1000).toISOString(), // 10-min lobby timeout
     });
 
     if (error) throw error;
