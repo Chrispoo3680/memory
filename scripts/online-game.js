@@ -93,7 +93,28 @@ async function getAuthToken() {
   return authToken ?? "";
 }
 
-// ── Server calls ─────────────────────────────────────────────────────────────
+/**
+ * Tells the server this player is leaving.
+ * Server deletes the row when status=waiting, sets abandoned when playing.
+ */
+async function leaveGame() {
+  if (!gameCode) return;
+  const code = gameCode; // capture before showLobby() clears it
+  const token = await getAuthToken();
+  try {
+    await fetch(`${SUPABASE_URL}/functions/v1/leave-game`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: PUBLIC_ANON_KEY,
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ code }),
+    });
+  } catch (_) {
+    // Best-effort — don't block the UI
+  }
+}
 
 /**
  * Calls the create-game Edge Function.
@@ -429,6 +450,12 @@ joinBtn.addEventListener("click", async () => {
 
   try {
     await signIn(displayName); // sets playerId (UUID) + playerName
+
+    // Prevent joining own game
+    if (gameCode && code === gameCode) {
+      throw new Error("You cannot join your own game.");
+    }
+
     const game = await joinGame(code);
     gameCode = game.code;
 
