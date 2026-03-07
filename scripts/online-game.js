@@ -15,7 +15,8 @@ let gameCode = null; // current game code
 let boardWidth = 4; // columns
 let boardHeight = 4; // rows
 let realtimeChannel = null;
-let lobbyTimerId = null; // client-side 10-min lobby expiry timerlet pollIntervalId  = null;   // polling fallback while waiting for player 2
+let lobbyTimerId = null; // client-side 10-min lobby expiry timer
+let pollIntervalId = null; // polling fallback while waiting for player 2
 // ── DOM refs ─────────────────────────────────────────────────────────────────
 const lobby = document.getElementById("lobby");
 const gameScreen = document.getElementById("game-screen");
