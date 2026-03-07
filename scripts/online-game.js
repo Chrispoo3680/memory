@@ -135,10 +135,13 @@ async function joinGame(code) {
     .eq("code", code)
     .eq("status", "waiting")
     .select()
-    .single();
+    .maybeSingle();
 
-  if (error || !data) {
-    throw new Error(error?.message || "Game not found or already started.");
+  if (error) {
+    throw new Error(error.message);
+  }
+  if (!data) {
+    throw new Error("Game not found or already started.");
   }
 
   return data;
