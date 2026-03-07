@@ -52,8 +52,42 @@ function clearLobbyError() {
   lobbyError.classList.add("hidden");
 }
 
-function getPlayerName() {
+function getDisplayName() {
   return playerNameInput.value.trim() || "Anonymous";
+}
+
+/**
+ * Signs the player in anonymously (or reuses an existing session).
+ * Updates their display name in auth metadata.
+ * Sets the module-level `playerId` (UUID) and `playerName`.
+ */
+async function signIn(displayName) {
+  // Reuse existing session if already signed in
+  const {
+    data: { session: existing },
+  } = await supabase.auth.getSession();
+
+  let session = existing;
+
+  if (!session) {
+    const { data, error } = await supabase.auth.signInAnonymously();
+    if (error) throw new Error("Auth failed: " + error.message);
+    session = data.session;
+  }
+
+  // Store / update the display name in user metadata
+  await supabase.auth.updateUser({ data: { display_name: displayName } });
+
+  playerId = session.user.id; // UUID
+  playerName = displayName;
+}
+
+/** Returns the current JWT for use in fetch Authorization headers. */
+async function getAuthToken() {
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  return session?.access_token ?? "";
 }
 
 // ── Server calls ─────────────────────────────────────────────────────────────
@@ -62,15 +96,17 @@ function getPlayerName() {
  * Calls the create-game Edge Function.
  * Returns the generated game code string.
  */
-async function createGame(pId, width, height) {
+async function createGame(displayName, width, height) {
+  const token = await getAuthToken();
   const res = await fetch(`${SUPABASE_URL}/functions/v1/create-game`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       apikey: PUBLIC_ANON_KEY,
+      Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
-      playerId: pId,
+      displayName,
       boardWidth: width,
       boardHeight: height,
     }),
@@ -89,12 +125,14 @@ async function createGame(pId, width, height) {
  * Joins an existing game by updating player2 and status.
  * Returns the full game row.
  */
-async function joinGame(code, pId) {
+async function joinGame(code) {
+  // The authenticated user's UUID is set automatically by the Supabase client.
+  // RLS allows this update because status='waiting' and player2 is still null.
   const { data, error } = await supabase
     .from("games")
-    .update({ player2: pId, status: "playing" })
+    .update({ player2: playerId, player2_name: playerName, status: "playing" })
     .eq("code", code)
-    .eq("status", "waiting") // only join games still waiting for a second player
+    .eq("status", "waiting")
     .select()
     .single();
 
@@ -110,13 +148,16 @@ async function joinGame(code, pId) {
  * The server is authoritative; the client never modifies game state directly.
  */
 async function flipCard(cardId) {
+  const token = await getAuthToken();
   await fetch(`${SUPABASE_URL}/functions/v1/make-move`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       apikey: PUBLIC_ANON_KEY,
+      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ code: gameCode, playerId, cardId }),
+    // playerId is NOT sent — the server reads it from the verified JWT
+    body: JSON.stringify({ code: gameCode, cardId }),
   });
 }
 
@@ -166,10 +207,10 @@ function handleGameUpdate(game) {
 
   renderBoard(cards, flipped, width, height);
   updateStatusBar(game);
-  updateScoreboard(cards, game.player1, game.player2);
+  updateScoreboard(cards, game);
 
   if (game.status === "finished") {
-    showResult(cards, game.player1, game.player2);
+    showResult(cards, game);
   }
 }
 
@@ -213,6 +254,10 @@ function renderBoard(cards, flipped, width, height) {
 
 function updateStatusBar(game) {
   const isMyTurn = game.current_turn === playerId;
+  const turnName =
+    game.current_turn === game.player1
+      ? (game.player1_name ?? "Player 1")
+      : (game.player2_name ?? "Player 2");
 
   if (game.status === "waiting") {
     statusText.textContent = "Waiting for opponent…";
@@ -224,42 +269,49 @@ function updateStatusBar(game) {
     statusText.textContent = "Your turn!";
     statusText.className = "your-turn";
   } else {
-    statusText.textContent = `${game.current_turn}'s turn…`;
+    statusText.textContent = `${turnName}'s turn…`;
     statusText.className = "their-turn";
   }
 }
 
-function updateScoreboard(cards, player1, player2) {
+function updateScoreboard(cards, game) {
+  // Scores are counted by UUID (matchedBy stores UUID)
   const p1Score = cards.filter(
-    (c) => c.matched && c.matchedBy === player1,
+    (c) => c.matched && c.matchedBy === game.player1,
   ).length;
   const p2Score = cards.filter(
-    (c) => c.matched && c.matchedBy === player2,
+    (c) => c.matched && c.matchedBy === game.player2,
   ).length;
 
-  scoreP1.textContent = `${player1 ?? "P1"}  ${p1Score}`;
-  scoreP2.textContent = `${player2 ?? "P2"}  ${p2Score}`;
+  const p1Name = game.player1_name ?? "Player 1";
+  const p2Name = game.player2_name ?? "Player 2";
+
+  scoreP1.textContent = `${p1Name}  ${p1Score}`;
+  scoreP2.textContent = `${p2Name}  ${p2Score}`;
 }
 
-function showResult(cards, player1, player2) {
+function showResult(cards, game) {
   const p1Score = cards.filter(
-    (c) => c.matched && c.matchedBy === player1,
+    (c) => c.matched && c.matchedBy === game.player1,
   ).length;
   const p2Score = cards.filter(
-    (c) => c.matched && c.matchedBy === player2,
+    (c) => c.matched && c.matchedBy === game.player2,
   ).length;
+
+  const p1Name = game.player1_name ?? "Player 1";
+  const p2Name = game.player2_name ?? "Player 2";
 
   if (p1Score > p2Score) {
     resultTitle.textContent =
-      playerId === player1 ? "You win! 🎉" : `${player1} wins!`;
+      playerId === game.player1 ? "You win! 🎉" : `${p1Name} wins!`;
   } else if (p2Score > p1Score) {
     resultTitle.textContent =
-      playerId === player2 ? "You win! 🎉" : `${player2} wins!`;
+      playerId === game.player2 ? "You win! 🎉" : `${p2Name} wins!`;
   } else {
     resultTitle.textContent = "It's a tie!";
   }
 
-  resultSub.textContent = `${player1} ${p1Score} – ${p2Score} ${player2}`;
+  resultSub.textContent = `${p1Name} ${p1Score} – ${p2Score} ${p2Name}`;
   resultOverlay.classList.remove("hidden");
 }
 
@@ -276,7 +328,7 @@ function showGameScreen(game) {
 
   renderBoard(cards, flipped, boardWidth, boardHeight);
   updateStatusBar(game);
-  updateScoreboard(cards, game.player1, game.player2);
+  updateScoreboard(cards, game);
 }
 
 function showLobby() {
@@ -296,7 +348,7 @@ function showLobby() {
 // ── Event listeners ───────────────────────────────────────────────────────────
 createBtn.addEventListener("click", async () => {
   clearLobbyError();
-  playerId = getPlayerName();
+  const displayName = getDisplayName();
   boardWidth = parseInt(boardWidthSelect.value, 10);
   boardHeight = parseInt(boardHeightSelect.value, 10);
 
@@ -309,12 +361,11 @@ createBtn.addEventListener("click", async () => {
   createBtn.textContent = "Creating…";
 
   try {
-    gameCode = await createGame(playerId, boardWidth, boardHeight);
+    await signIn(displayName); // sets playerId (UUID) + playerName
+    gameCode = await createGame(displayName, boardWidth, boardHeight);
     gameCodeSpan.textContent = gameCode;
     gameCodeDisplay.classList.remove("hidden");
 
-    // Host subscribes now; when player2 joins the row updates to status="playing"
-    // and handleGameUpdate will call showGameScreen automatically.
     subscribeToGame(gameCode);
   } catch (err) {
     showLobbyError(err.message);
@@ -326,7 +377,7 @@ createBtn.addEventListener("click", async () => {
 
 joinBtn.addEventListener("click", async () => {
   clearLobbyError();
-  playerId = getPlayerName();
+  const displayName = getDisplayName();
   const code = joinCodeInput.value.trim().toUpperCase();
 
   if (!code) {
@@ -338,7 +389,8 @@ joinBtn.addEventListener("click", async () => {
   joinBtn.textContent = "Joining…";
 
   try {
-    const game = await joinGame(code, playerId);
+    await signIn(displayName); // sets playerId (UUID) + playerName
+    const game = await joinGame(code);
     gameCode = game.code;
 
     subscribeToGame(gameCode);

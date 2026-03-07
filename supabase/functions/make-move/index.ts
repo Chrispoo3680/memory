@@ -1,4 +1,4 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from "npm:@supabase/supabase-js";
 
 // ── CORS headers returned on every response ──────────────────────────────────
 const CORS_HEADERS = {
@@ -31,16 +31,28 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
-    const { code, playerId, cardId } = await req.json();
-
-    if (!code || !playerId || cardId === undefined) {
-      return json({ error: "code, playerId, and cardId are required" }, 400);
-    }
+    // Extract the calling user's UUID from the JWT — never trust the request body for identity
+    const authHeader = req.headers.get("Authorization") ?? "";
+    const token = authHeader.replace("Bearer ", "");
 
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
     );
+
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser(token);
+    if (authError || !user) return json({ error: "Unauthorized" }, 401);
+
+    const playerId = user.id;
+
+    const { code, cardId } = await req.json();
+
+    if (!code || cardId === undefined) {
+      return json({ error: "code and cardId are required" }, 400);
+    }
 
     // ── Fetch game ────────────────────────────────────────────────────────────
     const { data: game, error: fetchError } = await supabase

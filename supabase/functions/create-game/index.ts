@@ -1,4 +1,4 @@
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { createClient } from "npm:@supabase/supabase-js";
 
 // ── CORS headers returned on every response ──────────────────────────────────
 const CORS_HEADERS = {
@@ -60,14 +60,31 @@ Deno.serve(async (req: Request) => {
   }
 
   try {
-    const { playerId, boardWidth = 4, boardHeight = 4 } = await req.json();
+    // Extract the calling user's UUID from the JWT
+    const authHeader = req.headers.get("Authorization") ?? "";
+    const token = authHeader.replace("Bearer ", "");
 
-    if (!playerId) {
-      return new Response(JSON.stringify({ error: "playerId is required" }), {
-        status: 400,
+    const supabase = createClient(
+      Deno.env.get("SUPABASE_URL")!,
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    );
+
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser(token);
+    if (authError || !user) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 401,
         headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
       });
     }
+
+    const {
+      displayName = "Anonymous",
+      boardWidth = 4,
+      boardHeight = 4,
+    } = await req.json();
 
     if ((boardWidth * boardHeight) % 2 !== 0) {
       return new Response(
@@ -78,11 +95,6 @@ Deno.serve(async (req: Request) => {
         },
       );
     }
-
-    const supabase = createClient(
-      Deno.env.get("SUPABASE_URL")!,
-      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
-    );
 
     // Retry on code collision (very unlikely but safe)
     let code = "";
@@ -101,11 +113,13 @@ Deno.serve(async (req: Request) => {
 
     const { error } = await supabase.from("games").insert({
       code,
-      player1: playerId,
+      player1: user.id,
+      player1_name: displayName,
       player2: null,
+      player2_name: null,
       board,
       flipped: [],
-      current_turn: playerId,
+      current_turn: user.id,
       lock: false,
       status: "waiting",
     });
