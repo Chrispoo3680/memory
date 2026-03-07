@@ -15,8 +15,7 @@ let gameCode = null; // current game code
 let boardWidth = 4; // columns
 let boardHeight = 4; // rows
 let realtimeChannel = null;
-let lobbyTimerId = null; // client-side 10-min lobby expiry timer
-
+let lobbyTimerId = null; // client-side 10-min lobby expiry timerlet pollIntervalId  = null;   // polling fallback while waiting for player 2
 // ── DOM refs ─────────────────────────────────────────────────────────────────
 const lobby = document.getElementById("lobby");
 const gameScreen = document.getElementById("game-screen");
@@ -162,7 +161,7 @@ async function createGame(displayName, width, height) {
  * Joins an existing game via the join-game Edge Function.
  * Server validates joinability, expiry, and self-join using the service role key.
  */
-async function joinGame(code) {
+async function joinGame(code, displayName) {
   const token = await getAuthToken();
   const res = await fetch(`${SUPABASE_URL}/functions/v1/join-game`, {
     method: "POST",
@@ -171,7 +170,7 @@ async function joinGame(code) {
       apikey: PUBLIC_ANON_KEY,
       Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ code, displayName: playerName }),
+    body: JSON.stringify({ code, displayName }),
   });
 
   const data = await res.json();
@@ -223,6 +222,27 @@ function subscribeToGame(code) {
       },
     )
     .subscribe();
+
+  // Polling fallback: if Realtime is blocked by RLS, poll every 3 s while waiting
+  if (pollIntervalId) clearInterval(pollIntervalId);
+  pollIntervalId = setInterval(async () => {
+    // Stop if we've already moved on
+    if (!gameCode || !gameScreen.classList.contains("hidden")) {
+      clearInterval(pollIntervalId);
+      pollIntervalId = null;
+      return;
+    }
+    const { data } = await supabase
+      .from("games")
+      .select("*")
+      .eq("code", code)
+      .maybeSingle();
+    if (data && data.status !== "waiting") {
+      clearInterval(pollIntervalId);
+      pollIntervalId = null;
+      handleGameUpdate(data);
+    }
+  }, 3000);
 }
 
 // ── Game update handler ───────────────────────────────────────────────────────
@@ -247,12 +267,16 @@ function handleGameUpdate(game) {
   boardWidth = width;
   boardHeight = height;
 
-  // If the host is still on the lobby (waiting for player2), switch to game screen
-  if (!gameScreen.classList.contains("hidden") === false) {
+  // ── Host waiting for player2 to join ─────────────────────────────────────
+  // Transition to game screen when status flips to "playing"
+  if (game.status === "playing" && gameScreen.classList.contains("hidden")) {
     clearLobbyTimer();
     showGameScreen(game);
     return;
   }
+
+  // Still waiting — do nothing until someone joins
+  if (game.status === "waiting") return;
 
   renderBoard(cards, flipped, width, height);
   updateStatusBar(game);
@@ -269,6 +293,10 @@ function handleGameUpdate(game) {
  */
 function closeGame(reason) {
   clearLobbyTimer();
+  if (pollIntervalId) {
+    clearInterval(pollIntervalId);
+    pollIntervalId = null;
+  }
   if (realtimeChannel) {
     supabase.removeChannel(realtimeChannel);
     realtimeChannel = null;
@@ -406,6 +434,10 @@ function showGameScreen(game) {
 
 function showLobby() {
   clearLobbyTimer();
+  if (pollIntervalId) {
+    clearInterval(pollIntervalId);
+    pollIntervalId = null;
+  }
   gameScreen.classList.add("hidden");
   lobby.classList.remove("hidden");
   gameCodeDisplay.classList.add("hidden");
@@ -480,7 +512,7 @@ joinBtn.addEventListener("click", async () => {
       throw new Error("You cannot join your own game.");
     }
 
-    const game = await joinGame(code);
+    const game = await joinGame(code, displayName);
     gameCode = game.code;
 
     subscribeToGame(gameCode);
