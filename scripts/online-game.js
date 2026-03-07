@@ -8,7 +8,8 @@ const PUBLIC_ANON_KEY =
 const supabase = createClient(SUPABASE_URL, PUBLIC_ANON_KEY);
 
 // ── Game state ───────────────────────────────────────────────────────────────
-let playerId = null; // this player's name / id
+let playerId = null; // this player's UUID (from anonymous auth)
+let playerName = null; // this player's display name
 let gameCode = null; // current game code
 let boardWidth = 4; // columns
 let boardHeight = 4; // rows
