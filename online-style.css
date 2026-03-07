@@ -1,0 +1,323 @@
+/* ── Reset & base ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #0f172a;
+  --surface: #1e293b;
+  --border: #334155;
+  --accent: #6366f1;
+  --accent-h: #818cf8;
+  --text: #f1f5f9;
+  --muted: #94a3b8;
+  --danger: #f87171;
+  --success: #34d399;
+  --card-bg: #1e293b;
+  --card-flip: #6366f1;
+  --card-match: #059669;
+  --radius: 12px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Segoe UI", system-ui, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ── Lobby ── */
+#lobby {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+#lobby h1 {
+  font-size: 2rem;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: -0.5px;
+}
+
+#lobby h1 span {
+  color: var(--accent);
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.card h2 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--accent-h);
+}
+
+label {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+input[type="text"],
+select {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 0.95rem;
+  padding: 0.6rem 0.85rem;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+input[type="text"]:focus,
+select:focus {
+  border-color: var(--accent);
+}
+
+select option {
+  background: var(--surface);
+}
+
+.size-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  flex: 1;
+}
+
+button {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.65rem 1.25rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    transform 0.1s;
+}
+
+button:hover {
+  background: var(--accent-h);
+}
+button:active {
+  transform: scale(0.97);
+}
+
+#game-code-display {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.4rem;
+  text-align: center;
+}
+
+#game-code-display p {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+#game-code {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: 0.25em;
+  color: var(--accent-h);
+}
+
+.waiting {
+  font-size: 0.8rem !important;
+  color: var(--muted) !important;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.error {
+  color: var(--danger);
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+/* ── Game screen ── */
+#game-screen {
+  width: 100%;
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+#leave-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 0.45rem 0.9rem;
+  font-size: 0.85rem;
+}
+
+#leave-btn:hover {
+  border-color: var(--accent);
+  color: var(--text);
+  background: transparent;
+}
+
+#status-bar {
+  flex: 1;
+  text-align: center;
+}
+
+#status-text {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+#status-text.your-turn {
+  color: var(--success);
+}
+#status-text.their-turn {
+  color: var(--muted);
+}
+
+#scoreboard {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 700;
+}
+
+.divider {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+/* ── Memory board ── */
+#memory-container {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+}
+
+.memory-card {
+  aspect-ratio: 1;
+  background: var(--card-bg);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(1rem, 3vw, 1.75rem);
+  font-weight: 800;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    transform 0.15s;
+}
+
+.memory-card:hover:not(.matched):not(.no-click) {
+  border-color: var(--accent);
+  transform: scale(1.04);
+}
+
+.memory-card.flipped {
+  background: var(--card-flip);
+  border-color: var(--card-flip);
+  color: #fff;
+}
+
+.memory-card.matched {
+  background: var(--card-match);
+  border-color: var(--card-match);
+  color: #fff;
+  cursor: default;
+}
+
+.memory-card.no-click {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* ── Result overlay ── */
+#result-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.result-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem 2.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 340px;
+  width: 100%;
+}
+
+.result-box h2 {
+  font-size: 1.75rem;
+}
+.result-box p {
+  color: var(--muted);
+}
