@@ -453,7 +453,7 @@ body.moon .levels {
 }
 
 .memory-card:hover:not(.matched):not(.no-click) {
-  transform: scale(1.05);
+  border-color: var(--accent);
 }
 
 .memory-card.flipped {

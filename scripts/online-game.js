@@ -77,6 +77,8 @@ let boardHeight = 4; // rows
 let realtimeChannel = null;
 let lobbyTimerId = null; // client-side 10-min lobby expiry timer
 let pollIntervalId = null; // polling fallback while waiting for player 2
+let currentGameState = null; // last authoritative game state from server
+let optimisticFlipped = []; // card IDs flipped locally before server confirms
 // ── DOM refs ─────────────────────────────────────────────────────────────────
 const lobby = document.getElementById("lobby");
 const gameScreen = document.getElementById("game-screen");
@@ -241,20 +243,57 @@ async function joinGame(code, displayName) {
 
 /**
  * Sends a flip-card move to the make-move Edge Function.
- * The server is authoritative; the client never modifies game state directly.
+ * Optimistically flips the card immediately for instant visual feedback.
+ * Reverts if the server rejects the move.
  */
 async function flipCard(cardId) {
-  const token = await getAuthToken();
-  await fetch(`${SUPABASE_URL}/functions/v1/make-move`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      apikey: PUBLIC_ANON_KEY,
-      Authorization: `Bearer ${token}`,
-    },
-    // playerId is NOT sent — the server reads it from the verified JWT
-    body: JSON.stringify({ code: gameCode, cardId }),
-  });
+  // Prevent flipping the same card twice while the request is in-flight
+  if (optimisticFlipped.includes(cardId)) return;
+  optimisticFlipped = [...optimisticFlipped, cardId];
+
+  // Instant visual feedback — flip the card without waiting for the server
+  const el = memoryContainer.querySelector(`[data-card-id="${cardId}"]`);
+  if (el && currentGameState) {
+    const card = currentGameState.board.cards.find((c) => c.id === cardId);
+    if (card) {
+      el.innerHTML = `<img src="${imagePaths[card.value]}" alt="">`;
+      el.classList.add("flipped");
+      el.onclick = null; // block re-clicking while in-flight
+    }
+  }
+
+  try {
+    const token = await getAuthToken();
+    const res = await fetch(`${SUPABASE_URL}/functions/v1/make-move`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: PUBLIC_ANON_KEY,
+        Authorization: `Bearer ${token}`,
+      },
+      // playerId is NOT sent — the server reads it from the verified JWT
+      body: JSON.stringify({ code: gameCode, cardId }),
+    });
+
+    if (!res.ok) {
+      // Server rejected the move — revert the optimistic flip
+      optimisticFlipped = optimisticFlipped.filter((id) => id !== cardId);
+      if (el) {
+        el.innerHTML = "";
+        el.classList.remove("flipped");
+        el.onclick = () => flipCard(cardId);
+      }
+    }
+    // On success: the realtime/poll update will confirm and clean up optimisticFlipped
+  } catch (_) {
+    // Network error — revert
+    optimisticFlipped = optimisticFlipped.filter((id) => id !== cardId);
+    if (el) {
+      el.innerHTML = "";
+      el.classList.remove("flipped");
+      el.onclick = () => flipCard(cardId);
+    }
+  }
 }
 
 // ── Realtime subscription ─────────────────────────────────────────────────────
@@ -320,12 +359,25 @@ function handleGameUpdate(game) {
   }
   if (game.status === "abandoned") {
     clearLobbyTimer();
-    closeGame("Motspilleren forlot spillet.");
+    closeGame("Motstanderen forlot spillet.");
     return;
   }
 
+  // Store authoritative state so optimistic flips can reference card values
+  currentGameState = game;
+
   const cards = game.board?.cards ?? [];
-  const flipped = game.flipped ?? [];
+  const serverFlipped = game.flipped ?? [];
+
+  // Remove optimistic cards that the server has now confirmed or matched
+  const matchedIds = cards.filter((c) => c.matched).map((c) => c.id);
+  optimisticFlipped = optimisticFlipped.filter(
+    (id) => !serverFlipped.includes(id) && !matchedIds.includes(id),
+  );
+
+  // Merge: show server-flipped cards AND any still-pending local flips
+  const flipped = [...new Set([...serverFlipped, ...optimisticFlipped])];
+
   const width = game.board?.width ?? boardWidth;
   const height = game.board?.height ?? boardHeight;
 
@@ -368,6 +420,8 @@ function closeGame(reason) {
   }
   const code = gameCode;
   gameCode = null;
+  optimisticFlipped = [];
+  currentGameState = null;
 
   // Show lobby
   gameScreen.classList.add("hidden");
@@ -383,37 +437,57 @@ function closeGame(reason) {
 // ── Render ────────────────────────────────────────────────────────────────────
 
 /**
- * Renders the memory board grid.
- * - matched cards → show value (green)
- * - flipped cards → show value (purple)
- * - hidden cards  → show "?"
+ * Renders the memory board grid using a stable DOM — card elements are created
+ * once and updated in-place on subsequent calls, so click listeners are never
+ * lost mid-click and there is no visual flash between updates.
+ *
+ * - matched cards → show image (green)
+ * - flipped cards → show image (purple); includes optimistically-flipped cards
+ * - hidden cards  → question mark via CSS, clickable
  */
 function renderBoard(cards, flipped, width, height) {
   memoryContainer.style.gridTemplateColumns = `repeat(${width}, 1fr)`;
   memoryContainer.style.gridTemplateRows = `repeat(${height}, 1fr)`;
-  memoryContainer.innerHTML = "";
 
+  // Create card elements on first render or when the board size changes
+  if (memoryContainer.children.length !== cards.length) {
+    memoryContainer.innerHTML = "";
+    cards.forEach((card) => {
+      const el = document.createElement("div");
+      el.className = "memory-card";
+      el.dataset.cardId = String(card.id);
+      memoryContainer.appendChild(el);
+    });
+  }
+
+  // Update each card's state in-place — never destroy existing elements
   cards.forEach((card) => {
-    const el = document.createElement("div");
-    el.className = "memory-card";
+    const el = memoryContainer.querySelector(`[data-card-id="${card.id}"]`);
+    if (!el) return;
 
     const isFlipped = flipped.includes(card.id);
     const isMatched = card.matched;
+    const wasMatched = el.classList.contains("matched");
+    const wasFlipped = el.classList.contains("flipped");
+    const wasFaceDown = !wasFlipped && !wasMatched;
 
-    if (isMatched) {
+    if (isMatched && !wasMatched) {
       el.innerHTML = `<img src="${imagePaths[card.value]}" alt="">`;
-      el.classList.add("matched");
-    } else if (isFlipped) {
+      el.className = "memory-card matched";
+      el.onclick = null;
+    } else if (isFlipped && !wasFlipped && !wasMatched) {
       el.innerHTML = `<img src="${imagePaths[card.value]}" alt="">`;
-      el.classList.add("flipped");
+      el.className = "memory-card flipped";
+      el.onclick = null;
+    } else if (!isFlipped && !isMatched && !wasFaceDown) {
+      // Card was flipped/matched but is now face-down (mismatch resolved)
+      el.innerHTML = "";
+      el.className = "memory-card";
+      el.onclick = () => flipCard(card.id);
+    } else if (wasFaceDown && !el.onclick) {
+      // First render: ensure face-down cards have a click handler
+      el.onclick = () => flipCard(card.id);
     }
-    // face-down: no img; question mark shown via CSS background-image
-
-    if (!isMatched) {
-      el.addEventListener("click", () => flipCard(card.id));
-    }
-
-    memoryContainer.appendChild(el);
   });
 }
 
@@ -425,7 +499,7 @@ function updateStatusBar(game) {
       : (game.player2_name ?? "Player 2");
 
   if (game.status === "waiting") {
-    statusText.textContent = "Venter på motspiller…";
+    statusText.textContent = "Venter på motstander…";
     statusText.className = "";
   } else if (game.status === "finished") {
     statusText.textContent = "Spillet er over!";
@@ -486,6 +560,9 @@ function showGameScreen(game) {
   gameScreen.classList.remove("hidden");
   resultOverlay.classList.add("hidden");
 
+  currentGameState = game;
+  optimisticFlipped = [];
+
   const cards = game.board?.cards ?? [];
   const flipped = game.flipped ?? [];
   boardWidth = game.board?.width ?? boardWidth;
@@ -513,6 +590,8 @@ function showLobby() {
   }
 
   gameCode = null;
+  optimisticFlipped = [];
+  currentGameState = null;
 }
 
 // ── Event listeners ───────────────────────────────────────────────────────────
