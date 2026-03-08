@@ -16,7 +16,9 @@ navElm.onclick = function () {
     houseElm.style.filter = "invert(1)";
     document.querySelector("section:nth-of-type(2)").style.backgroundColor =
       "#16002d";
-    document.querySelector("p").style.color = "white";
+    document.querySelectorAll("p").forEach(function (p) {
+      p.style.color = "white";
+    });
   } else {
     document.querySelector("section:first-of-type").style.filter = "none";
     document.querySelector(".indexheader").style.backgroundColor = "white";

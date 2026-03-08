@@ -8,14 +8,32 @@
 
 .historysection {
   display: flex;
-  justify-content: space-between;
-  gap: 60px;
-  padding: 75px;
+  flex-direction: column;
+  gap: 40px;
+  padding-block: 50px;
+  padding-inline: 250px;
   background-color: var(--bg-header);
   box-shadow: 0 0 700px;
   position: relative;
+  z-index: 1;
 }
-
+section:last-of-type {
+  background-image: url(assets/images/historycontainer.png);
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  padding-block: 50px;
+  padding-inline: 250px;
+  background-color: var(--bg-header);
+  box-shadow: 0 0 700px;
+  font-size: 20px;
+  color: white;
+  text-align: end;
+}
+h1 {
+  color: #f4bf0d;
+}
 header {
   background-color: var(--bg-header);
   display: flex;
@@ -31,5 +49,7 @@ header {
 
 .historysection p {
   font-size: 20px;
+  font-weight: 100;
   line-height: 1.5;
+  color: rgb(68, 47, 88);
 }

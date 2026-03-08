@@ -1,10 +1,10 @@
 .topsection {
   width: 100%;
-  background-image: url(assets/images/guide.png);
+  background-image: url(assets/images/peopleplaying.png);
   background-position: center;
-  height: 400px;
+  height: 600px;
   background-repeat: repeat-x;
-  background-position: contain;
+  background-size: cover;
 }
 
 header {
@@ -16,47 +16,144 @@ header {
   padding-inline: 60px;
 }
 
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 30px;
+}
+
+/* About Section */
 .aboutsection {
+  padding: 80px 0;
+  background-color: white;
+  box-shadow: 0 0 100px;
+  position: relative;
+  z-index: 1;
+}
+
+.about-content h1 {
+  font-size: 48px;
+  text-align: center;
   margin-bottom: 50px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 90vh;
+  color: #f4bf0d;
 }
 
-.aboutsection > div {
-  display: flex;
-  justify-content: space-between;
+.about-card {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: rgba(83, 0, 128, 0.152);
   gap: 60px;
-  padding: 75px;
+  align-items: center;
+  padding: 50px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.376);
 }
 
+.about-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+}
+
+.about-text p {
+  font-size: 18px;
+  line-height: 1.8;
+  margin-bottom: 20px;
+  color: rgb(68, 47, 88);
+}
+.about-text p:last-child {
+  margin-bottom: 0;
+  color: rgb(68, 47, 88);
+}
+
+/* Guide Section */
 .guide {
+  padding: 80px 0;
+  position: relative;
+  background-color: rgb(63, 0, 105);
+}
+
+.guide .container {
+  position: relative;
+  z-index: 1;
+}
+
+.guide h2 {
+  font-size: 48px;
+  text-align: center;
+  margin-bottom: 60px;
+  color: #f4bf0d;
+}
+
+.guide-steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+}
+
+.step {
+  background-color: rgb(111, 0, 170);
+  padding: 40px 30px;
+  border-radius: 12px;
+  text-align: center;
+  transition: 0.3s;
+  backdrop-filter: blur(10px);
+}
+
+.step:hover {
+  transform: scale(1.04);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+.step-number {
+  width: 60px;
+  height: 60px;
+  background-color: blueviolet;
+  color: white;
+  border-radius: 50%;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-image: url(assets/images/peopleplaying.png);
-  background-position: center;
-  background-size: cover;
-  height: 90vh;
-  filter: grayscale(80%) brightness(90%);
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
+  font-size: 28px;
+  font-weight: bold;
+  margin: 0 auto 20px;
+}
+
+.step h3 {
+  font-size: 24px;
+  margin-bottom: 15px;
   color: var(--text);
 }
 
-.aboutsection p {
-  font-size: 20px;
-  line-height: 2;
+.step p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: rgb(220, 183, 255);
 }
 
-h2 {
-  font-size: 50px;
-  margin-bottom: 10px;
-}
+/* Responsive Design */
+@media (max-width: 768px) {
+  .about-card {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    padding: 30px;
+  }
 
-ol {
-  font-size: 23px;
-  line-height: 3;
+  .guide-steps {
+    grid-template-columns: 1fr;
+  }
+
+  h1 {
+    font-size: 36px;
+  }
+
+  .guide h2 {
+    font-size: 36px;
+  }
+
+  .aboutsection,
+  .guide {
+    padding: 50px 0;
+  }
 }

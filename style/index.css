@@ -18,7 +18,7 @@ section {
   background-image: url(../assets/images/gamecatalog.png);
   background-position: center top;
   background-size: contain;
-  min-height: 105vh;
+  min-height: 125vh;
   position: relative;
 }
 
@@ -133,12 +133,17 @@ button:hover {
   filter: invert(1);
   transition: 0.2s;
   z-index: 3;
+  margin-top: 30px;
 }
 
 #start-button:hover {
   transform: scale(1.08);
 }
-
+.selection-btn {
+  font-family: "Cherry Bomb One", system-ui;
+  font-weight: 100;
+  font-style: normal;
+}
 .click > div {
   min-width: 50%;
   font-size: 25px;

@@ -4,7 +4,7 @@
 /* ── Design tokens ── */
 :root {
   /* Brand accent */
-  --accent: #6366f1;
+  --accent: #912aa7;
   --accent-hover: #818cf8;
 
   /* Main site backgrounds */
@@ -17,7 +17,7 @@
   /* Text */
   --text: #ffffff;
   --text-dark: #000000;
-  --text-muted: #94a3b8;
+  --text-muted: #b294b8;
   --text-danger: #f87171;
 
   /* Icon accent */
@@ -25,8 +25,8 @@
 
   /* Card & form surfaces (dark overlay style) */
   --surface: #1e293b;
-  --surface-deep: #0f172a;
-  --border: #334155;
+  --surface-deep: #2911379f;
+  --border: #503355;
   --radius: 12px;
 
   /* Game-specific overlays */
