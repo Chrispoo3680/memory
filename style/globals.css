@@ -1,21 +1,74 @@
 @import url("https://fonts.googleapis.com/css2?family=DynaPuff:wght@700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Cherry+Bomb+One&display=swap");
 
-* {
+/* ── Design tokens ── */
+:root {
+  /* Brand accent */
+  --accent: #6366f1;
+  --accent-hover: #818cf8;
+
+  /* Main site backgrounds */
+  --bg: #482148; /* page body (dark purple) */
+  --bg-dark: #000000; /* html bg & dark/moon mode */
+  --bg-sun: rgb(244, 191, 244); /* light/sun mode */
+  --bg-footer: rgb(59, 17, 59); /* footer */
+  --bg-header: #ffffff; /* page header */
+
+  /* Text */
+  --text: #ffffff;
+  --text-dark: #000000;
+  --text-muted: #94a3b8;
+  --text-danger: #f87171;
+
+  /* Icon accent */
+  --icon-color: #c832df;
+
+  /* Card & form surfaces (dark overlay style) */
+  --surface: #1e293b;
+  --surface-deep: #0f172a;
+  --border: #334155;
+  --radius: 12px;
+
+  /* Game-specific overlays */
+  --game-overlay: #421242d7; /* game page main panel */
+  --game-grid-bg: rgba(0, 0, 0, 0.47); /* memory card grid */
+  --card-flip: #6366f1;
+  --card-match: #059669;
+  --success: #34d399;
+
+  /* Difficulty level colors */
+  --easy-bg: green;
+  --easy-text: rgb(124, 208, 124);
+  --medium-bg: rgb(255, 140, 0);
+  --medium-text: rgb(252, 202, 147);
+  --hard-bg: red;
+  --hard-text: rgb(235, 134, 134);
+
+  /* Selection / chosen states */
+  --chosen-color: goldenrod;
+  --chosen2-color: rgb(214, 78, 214);
+}
+
+/* ── Reset ── */
+*,
+*::before,
+*::after {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
 html {
-  background-color: black;
+  background-color: var(--bg-dark);
 }
 
 body {
-  background-color: #482148;
+  background-color: var(--bg);
   overflow-x: hidden;
   font-family: "Cherry Bomb One", system-ui;
 }
 
+/* ── Site header ── */
 .indexheader {
   flex-direction: column;
   position: relative;
@@ -72,7 +125,6 @@ nav {
 i {
   font-size: 30px;
   transition: all 0.3s ease;
-  /* color: #968f8f; */
   cursor: pointer;
 }
 
@@ -81,20 +133,22 @@ i:hover {
 }
 
 a {
-  color: black;
+  color: var(--text-dark);
 }
 
+/* ── Footer ── */
 footer {
   display: flex;
   flex-direction: column;
-  background-color: rgb(59, 17, 59);
-  border-top: 2px solid black;
+  background-color: var(--bg-footer);
+  border-top: 2px solid var(--bg-dark);
   margin-top: auto;
   padding: 20px;
 }
 
+/* ── Theme: moon (dark) mode ── */
 body.moon {
-  background-color: black;
+  background-color: var(--bg-dark);
 }
 
 body.moon p,
@@ -103,11 +157,12 @@ body.moon h2,
 body.moon h3,
 body.moon i,
 body.moon a {
-  color: white;
+  color: var(--text);
 }
 
+/* ── Theme: sun (light) mode ── */
 body.sun {
-  background-color: rgb(244, 191, 244);
+  background-color: var(--bg-sun);
 }
 
 body.sun p,
@@ -116,22 +171,27 @@ body.sun h2,
 body.sun h3,
 body.sun i,
 body.sun a {
-  color: white;
+  color: var(--text);
 }
 
+/* ── Utility ── */
 .none {
   display: none !important;
 }
-/*     div.style.backgroundColor = "white";
-    div.style.color = "goldenrod";
-    div.style.border = "3px solid goldenrod"; */
-.chosen {
-  background-color: white;
-  color: goldenrod;
-  border: 3px solid goldenrod;
+
+.hidden {
+  display: none !important;
 }
+
+/* ── Chosen / selected state (theme picker) ── */
+.chosen {
+  background-color: var(--text);
+  color: var(--chosen-color);
+  border: 3px solid var(--chosen-color);
+}
+
 .chosen2 {
-  background-color: white;
-  color: rgb(214, 78, 214);
-  border: 3px solid rgb(214, 78, 214);
+  background-color: var(--text);
+  color: var(--chosen2-color);
+  border: 3px solid var(--chosen2-color);
 }

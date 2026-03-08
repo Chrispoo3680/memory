@@ -11,12 +11,13 @@
   justify-content: space-between;
   gap: 60px;
   padding: 75px;
-  background-color: white;
+  background-color: var(--bg-header);
   box-shadow: 0 0 700px;
   position: relative;
 }
 
 header {
+  background-color: var(--bg-header);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -31,7 +32,4 @@ header {
 .historysection p {
   font-size: 20px;
   line-height: 1.5;
-}
-header {
-  background-color: white;
 }

@@ -8,21 +8,12 @@ body {
 }
 
 section {
-  /*   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding-block: 80px;
-  gap: 50px;
-  background-image: url(../assets/images/gamecatalog.png);
-  background-position: center center;
-  background-size: cover; */
-
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: start;
   padding-top: 80px;
+  padding-bottom: 80px;
   gap: 50px;
   background-image: url(../assets/images/gamecatalog.png);
   background-position: center top;
@@ -30,14 +21,9 @@ section {
   min-height: 105vh;
   position: relative;
 }
+
 header {
-  background-color: white;
-}
-h1 {
-  font-size: 60px;
-  letter-spacing: 3px;
-}
-header {
+  background-color: var(--bg-header);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -45,6 +31,12 @@ header {
   padding-inline: 60px;
   z-index: 1;
 }
+
+h1 {
+  font-size: 60px;
+  letter-spacing: 3px;
+}
+
 section img:first-child {
   width: 100%;
   max-width: 700px;
@@ -56,15 +48,46 @@ section img:first-child {
   min-width: 100%;
   position: absolute;
   bottom: 0;
+  pointer-events: none;
 }
+
+/* ── Game mode selection buttons ── */
+#online-selection {
+  width: 400px;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  z-index: 3;
+}
+
+.selection-btn {
+  background-color: var(--bg-dark);
+  color: var(--text);
+  border: 3px solid var(--text);
+  border-radius: 20px;
+}
+
+.selected {
+  background-color: var(--accent);
+}
+
+/* ── Single-player level selector ── */
+#single-player-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  z-index: 3;
+  min-height: 200px;
+}
+
 .levels {
   max-width: 400px;
   padding: 20px;
   border-radius: 20px;
-  border: 3px solid white;
-  color: white;
+  border: 3px solid var(--text);
+  color: var(--text);
   background-color: rgba(0, 0, 0, 0.473);
-  z-index: 3;
 }
 
 .default {
@@ -90,17 +113,19 @@ button {
 button:hover {
   transform: scale(1.1);
 }
+
 #button:hover {
-  color: white;
+  color: var(--text);
 }
+
 .click {
   display: none;
   margin-top: 30px;
   justify-content: center;
-  /* align-items: center; */
   flex-direction: column;
   gap: 20px;
 }
+
 #start-button {
   cursor: pointer;
   max-width: 100px;
@@ -109,9 +134,11 @@ button:hover {
   transition: 0.2s;
   z-index: 3;
 }
+
 #start-button:hover {
   transform: scale(1.08);
 }
+
 .click > div {
   min-width: 50%;
   font-size: 25px;
@@ -128,22 +155,25 @@ button:hover {
 }
 
 .easy {
-  background-color: green;
-  color: rgb(124, 208, 124);
-  border: 3px solid rgb(124, 208, 124);
+  background-color: var(--easy-bg);
+  color: var(--easy-text);
+  border: 3px solid var(--easy-text);
 }
+
 .medium {
-  background-color: rgb(255, 140, 0);
-  color: rgb(252, 202, 147);
-  border: 3px solid white;
+  background-color: var(--medium-bg);
+  color: var(--medium-text);
+  border: 3px solid var(--text);
 }
+
 i {
-  color: #c832df;
+  color: var(--icon-color);
 }
+
 .hard {
-  background-color: red;
-  color: rgb(235, 134, 134);
-  border: 3px solid rgb(235, 134, 134);
+  background-color: var(--hard-bg);
+  color: var(--hard-text);
+  border: 3px solid var(--hard-text);
 }
 
 h3 {
@@ -164,5 +194,458 @@ footer > div > a:hover {
 }
 
 body.moon .levels {
-  border: 3px double white;
+  border: 3px double var(--text);
+}
+
+/* ── Multiplayer lobby ── */
+#lobby {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 450px;
+  position: relative;
+  z-index: 3;
+}
+
+#lobby .card {
+  background-color: rgba(0, 0, 0, 0.473);
+  border: 3px solid var(--text);
+  border-radius: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  color: var(--text);
+}
+
+#lobby .card h2 {
+  font-size: 25px;
+  letter-spacing: 1px;
+  color: var(--text);
+}
+
+#lobby label {
+  font-size: 18px;
+  color: var(--text);
+}
+
+#lobby input[type="text"],
+#lobby select {
+  background-color: rgba(0, 0, 0, 0.4);
+  border: 2px solid var(--text);
+  border-radius: 10px;
+  color: var(--text);
+  font-family: "Cherry Bomb One", system-ui;
+  font-size: 20px;
+  padding: 10px 15px;
+  width: 100%;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+#lobby input[type="text"]:focus,
+#lobby select:focus {
+  border-color: var(--accent);
+}
+
+#lobby select option {
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+#lobby .size-row {
+  display: flex;
+  gap: 15px;
+}
+
+#lobby .field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+#lobby button {
+  background-color: var(--bg-dark);
+  color: var(--text);
+  border: 3px solid var(--text);
+  border-radius: 20px;
+  padding: 15px 20px;
+  font-family: "Cherry Bomb One", system-ui;
+  font-size: 25px;
+  max-width: 100%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#lobby button:hover {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  transform: scale(1.05);
+}
+
+#lobby button:active {
+  transform: scale(0.97);
+}
+
+#game-code-display {
+  background-color: rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--text);
+  border-radius: 10px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+#game-code-display p {
+  font-size: 18px;
+  color: var(--text);
+}
+
+#game-code {
+  font-size: 2.5rem;
+  letter-spacing: 0.25em;
+  color: var(--text);
+}
+
+.waiting {
+  font-size: 16px !important;
+  color: var(--text) !important;
+  opacity: 0.75;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.75;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+.error {
+  color: var(--text-danger);
+  font-size: 20px;
+  text-align: center;
+}
+
+/* ── Multiplayer game overlay ── */
+#game-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  overflow-y: auto;
+}
+
+#mp-panel {
+  background: var(--surface-deep);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  position: relative;
+}
+
+#mp-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+#leave-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-family: "Cherry Bomb One", system-ui;
+  font-size: 0.9rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 8px;
+  max-width: fit-content;
+  transition: all 0.2s;
+}
+
+#leave-btn:hover {
+  border-color: var(--accent);
+  color: var(--text);
+  background: transparent;
+  transform: none;
+}
+
+#status-bar {
+  flex: 1;
+  text-align: center;
+}
+
+#status-text {
+  font-family: "Cherry Bomb One", system-ui;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+#status-text.your-turn {
+  color: var(--success);
+}
+
+#status-text.their-turn {
+  color: var(--text-muted);
+}
+
+#scoreboard {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: "Cherry Bomb One", system-ui;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.divider {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+/* Multiplayer card grid */
+#memory-container {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+}
+
+/* Multiplayer cards — emoji/text value style from online game */
+.memory-card {
+  aspect-ratio: 1;
+  background: var(--surface);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: clamp(1rem, 3vw, 1.75rem);
+  font-weight: 800;
+  cursor: pointer;
+  user-select: none;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    transform 0.15s;
+}
+
+.memory-card:hover:not(.matched):not(.no-click) {
+  border-color: var(--accent);
+  transform: scale(1.04);
+}
+
+.memory-card.flipped {
+  background: var(--card-flip);
+  border-color: var(--card-flip);
+  color: var(--text);
+}
+
+.memory-card.matched {
+  background: var(--card-match);
+  border-color: var(--card-match);
+  color: var(--text);
+  cursor: default;
+}
+
+.memory-card.no-click {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Result overlay inside mp-panel */
+#result-overlay {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.result-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem 2.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  max-width: 340px;
+  width: 100%;
+}
+
+.result-box h2 {
+  font-family: "Cherry Bomb One", system-ui;
+  font-size: 1.75rem;
+  color: var(--text);
+}
+
+.result-box p {
+  color: var(--text-muted);
+  font-family: "Cherry Bomb One", system-ui;
+}
+
+.result-box button {
+  background: var(--accent);
+  color: var(--text);
+  border: none;
+  border-radius: 8px;
+  padding: 0.65rem 1.25rem;
+  font-family: "Cherry Bomb One", system-ui;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    transform 0.1s;
+  max-width: 100%;
+}
+
+.result-box button:hover {
+  background: var(--accent-hover);
+  transform: none;
+}
+
+/* ── Single-player game overlay ── */
+#single-player-game {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  /* blurred page backdrop */
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  overflow-y: auto;
+}
+
+#sp-panel {
+  background: var(--surface-deep);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+#sp-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+#sp-back-btn {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  font-family: "Cherry Bomb One", system-ui;
+  font-size: 0.9rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 8px;
+  max-width: fit-content;
+  transition: all 0.2s;
+}
+
+#sp-back-btn:hover {
+  border-color: var(--accent);
+  color: var(--text);
+  background: transparent;
+  transform: none;
+}
+
+#sp-status {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-family: "Cherry Bomb One", system-ui;
+}
+
+/* Singleplayer card grid */
+#sp-memory-container {
+  display: grid;
+  gap: 10px;
+  width: 100%;
+}
+
+/* Individual memory cards — image-based flip style */
+#single-player-game .card,
+#single-player-game > .card {
+  aspect-ratio: 1;
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  background-image: url(../assets/images/question.png);
+  background-size: cover;
+  background-position: center center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    transform 0.15s,
+    border-color 0.15s;
+}
+
+#single-player-game .card:hover:not(.flipped) {
+  border-color: var(--accent);
+  transform: scale(1.04);
+}
+
+#single-player-game .card.flipped {
+  background-image: none;
+  background-color: var(--card-flip);
+  border-color: var(--card-flip);
+}
+
+#single-player-game .card.matched {
+  background-image: none;
+  background-color: var(--card-match);
+  border-color: var(--card-match);
+  cursor: default;
+}
+
+#single-player-game .card img {
+  width: 100%;
+  display: none;
+}
+
+#single-player-game .card.flipped img,
+#single-player-game .card.matched img {
+  display: block;
 }

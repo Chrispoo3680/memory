@@ -63,7 +63,7 @@ function clearLobbyTimer() {
 }
 
 function getDisplayName() {
-  return playerNameInput.value.trim() || "Anonymous";
+  return playerNameInput.value.trim() || "Anonym";
 }
 
 /**
@@ -255,12 +255,12 @@ function handleGameUpdate(game) {
   // ── Terminal states that close the game ──────────────────────────────────
   if (game.status === "expired") {
     clearLobbyTimer();
-    closeGame("The game lobby expired after 10 minutes.");
+    closeGame("Spilløkten utløp etter 10 minutter.");
     return;
   }
   if (game.status === "abandoned") {
     clearLobbyTimer();
-    closeGame("Your opponent left the game.");
+    closeGame("Motspilleren forlot spillet.");
     return;
   }
 
@@ -366,16 +366,16 @@ function updateStatusBar(game) {
       : (game.player2_name ?? "Player 2");
 
   if (game.status === "waiting") {
-    statusText.textContent = "Waiting for opponent…";
+    statusText.textContent = "Venter på motspiller…";
     statusText.className = "";
   } else if (game.status === "finished") {
-    statusText.textContent = "Game over!";
+    statusText.textContent = "Spillet er over!";
     statusText.className = "";
   } else if (isMyTurn) {
-    statusText.textContent = "Your turn!";
+    statusText.textContent = "Din tur!";
     statusText.className = "your-turn";
   } else {
-    statusText.textContent = `${turnName}'s turn…`;
+    statusText.textContent = `${turnName} sin tur…`;
     statusText.className = "their-turn";
   }
 }
@@ -389,8 +389,8 @@ function updateScoreboard(cards, game) {
     (c) => c.matched && c.matchedBy === game.player2,
   ).length;
 
-  const p1Name = game.player1_name ?? "Player 1";
-  const p2Name = game.player2_name ?? "Player 2";
+  const p1Name = game.player1_name ?? "Spiller 1";
+  const p2Name = game.player2_name ?? "Spiller 2";
 
   scoreP1.textContent = `${p1Name}  ${p1Score}`;
   scoreP2.textContent = `${p2Name}  ${p2Score}`;
@@ -404,17 +404,17 @@ function showResult(cards, game) {
     (c) => c.matched && c.matchedBy === game.player2,
   ).length;
 
-  const p1Name = game.player1_name ?? "Player 1";
-  const p2Name = game.player2_name ?? "Player 2";
+  const p1Name = game.player1_name ?? "Spiller 1";
+  const p2Name = game.player2_name ?? "Spiller 2";
 
   if (p1Score > p2Score) {
     resultTitle.textContent =
-      playerId === game.player1 ? "You win! 🎉" : `${p1Name} wins!`;
+      playerId === game.player1 ? "Du vant! 🎉" : `${p1Name} vant!`;
   } else if (p2Score > p1Score) {
     resultTitle.textContent =
-      playerId === game.player2 ? "You win! 🎉" : `${p2Name} wins!`;
+      playerId === game.player2 ? "Du vant! 🎉" : `${p2Name} vant!`;
   } else {
-    resultTitle.textContent = "It's a tie!";
+    resultTitle.textContent = "Uavgjort!";
   }
 
   resultSub.textContent = `${p1Name} ${p1Score} – ${p2Score} ${p2Name}`;
@@ -464,12 +464,12 @@ createBtn.addEventListener("click", async () => {
   boardHeight = parseInt(boardHeightSelect.value, 10);
 
   if ((boardWidth * boardHeight) % 2 !== 0) {
-    showLobbyError("Columns × Rows must be an even number.");
+    showLobbyError("Kolonner × Rader må være et partall.");
     return;
   }
 
   createBtn.disabled = true;
-  createBtn.textContent = "Creating…";
+  createBtn.textContent = "Oppretter…";
 
   try {
     await signIn(displayName); // sets playerId (UUID) + playerName
@@ -484,7 +484,7 @@ createBtn.addEventListener("click", async () => {
       async () => {
         await leaveGame();
         showLobby();
-        showLobbyError("Lobby expired — no one joined after 10 minutes.");
+        showLobbyError("Lobbyen utløp — ingen ble med etter 10 minutter.");
       },
       10 * 60 * 1000,
     );
@@ -492,7 +492,7 @@ createBtn.addEventListener("click", async () => {
     showLobbyError(err.message);
   } finally {
     createBtn.disabled = false;
-    createBtn.textContent = "Create Game";
+    createBtn.textContent = "Opprett spill";
   }
 });
 
@@ -502,19 +502,19 @@ joinBtn.addEventListener("click", async () => {
   const code = joinCodeInput.value.trim().toUpperCase();
 
   if (!code) {
-    showLobbyError("Please enter a game code.");
+    showLobbyError("Vennligst skriv inn en spillkode.");
     return;
   }
 
   joinBtn.disabled = true;
-  joinBtn.textContent = "Joining…";
+  joinBtn.textContent = "Kobler til…";
 
   try {
     await signIn(displayName); // sets playerId (UUID) + playerName
 
     // Prevent joining own game
     if (gameCode && code === gameCode) {
-      throw new Error("You cannot join your own game.");
+      throw new Error("Du kan ikke bli med i ditt eget spill.");
     }
 
     const game = await joinGame(code, displayName);
@@ -526,7 +526,7 @@ joinBtn.addEventListener("click", async () => {
     showLobbyError(err.message);
   } finally {
     joinBtn.disabled = false;
-    joinBtn.textContent = "Join Game";
+    joinBtn.textContent = "Bli med";
   }
 });
 

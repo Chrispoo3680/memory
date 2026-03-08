@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="no">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -36,19 +36,82 @@
 
     <section>
       <img src="assets/images/VelkommenBig.png" alt="" />
-      <div class="levels">
-        <div class="default">
-          <p>Velg nivå</p>
-          <i id="button" class="fa-solid fa-bars"></i>
-        </div>
-        <div class="click">
-          <div class="easy" onclick="setDifficulty('easy')">LETT</div>
-          <div class="medium" onclick="setDifficulty('medium')">MEDIUM</div>
-          <div class="hard" onclick="setDifficulty('hard')">VANSKELIG</div>
-        </div>
+      <div id="online-selection">
+        <button class="selection-btn">Enspiller</button>
+        <button class="selection-btn">Flerspiller</button>
       </div>
+      <div id="single-player-menu" class="hidden">
+        <div class="levels">
+          <div class="default">
+            <p>Velg nivå</p>
+            <i id="button" class="fa-solid fa-bars"></i>
+          </div>
+          <div class="click">
+            <div class="easy" onclick="setDifficulty('easy')">LETT</div>
+            <div class="medium" onclick="setDifficulty('medium')">MEDIUM</div>
+            <div class="hard" onclick="setDifficulty('hard')">VANSKELIG</div>
+          </div>
+        </div>
 
-      <img id="start-button" src="assets/images/playbutton.png" />
+        <img id="start-button" src="assets/images/playbutton.png" />
+      </div>
+      <div id="lobby" class="hidden">
+        <div class="card">
+          <label for="player-name">Ditt navn</label>
+          <input
+            id="player-name"
+            type="text"
+            placeholder="Skriv inn navn"
+            maxlength="20"
+          />
+        </div>
+
+        <!-- Create section -->
+        <div class="card" id="create-section">
+          <h2>Opprett spill</h2>
+
+          <div class="size-row">
+            <div class="field">
+              <label for="board-width">Kolonner</label>
+              <select id="board-width">
+                <option value="2">2</option>
+                <option value="4" selected>4</option>
+                <option value="6">6</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="board-height">Rader</label>
+              <select id="board-height">
+                <option value="2">2</option>
+                <option value="4" selected>4</option>
+                <option value="6">6</option>
+              </select>
+            </div>
+          </div>
+
+          <button id="create-btn">Opprett spill</button>
+
+          <div id="game-code-display" class="hidden">
+            <p>Del denne koden med motstanderen din:</p>
+            <span id="game-code"></span>
+            <p class="waiting">Venter på at motstanderen skal bli med…</p>
+          </div>
+        </div>
+
+        <!-- Join section -->
+        <div class="card" id="join-section">
+          <h2>Bli med i spill</h2>
+          <input
+            id="join-code"
+            type="text"
+            placeholder="Skriv inn spillkode"
+            maxlength="8"
+          />
+          <button id="join-btn">Bli med</button>
+        </div>
+
+        <p id="lobby-error" class="error hidden"></p>
+      </div>
       <img class="gradient" src="assets/images/blackgradient.png" alt="" />
     </section>
     <!-- 
@@ -59,6 +122,44 @@
       </div>
     </footer> -->
 
+    <!-- ── Single-player game overlay ── -->
+    <div id="single-player-game" class="hidden">
+      <div id="sp-panel">
+        <div id="sp-header">
+          <button id="sp-back-btn">← Tilbake</button>
+          <div id="sp-status">Forsøk: <span id="sp-attempts">0</span></div>
+        </div>
+        <div id="sp-memory-container"></div>
+      </div>
+    </div>
+
+    <!-- ── Multiplayer game overlay ── -->
+    <div id="game-screen" class="hidden">
+      <div id="mp-panel">
+        <div id="mp-header">
+          <button id="leave-btn">← Forlat</button>
+          <div id="status-bar">
+            <span id="status-text">Kobler til…</span>
+          </div>
+          <div id="scoreboard">
+            <span id="score-p1">–</span>
+            <span class="divider">vs</span>
+            <span id="score-p2">–</span>
+          </div>
+        </div>
+        <div id="memory-container"></div>
+        <div id="result-overlay" class="hidden">
+          <div class="result-box">
+            <h2 id="result-title"></h2>
+            <p id="result-sub"></p>
+            <button id="play-again-btn">Spill igjen</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="scripts/index.js"></script>
+    <script src="scripts/game-logic.js"></script>
+    <script type="module" src="scripts/online-game.js"></script>
   </body>
 </html>

@@ -64,80 +64,93 @@ function shuffle(array) {
   }
 }
 
-function checkWin() {
-  const flippedCards = document.querySelectorAll(".card.flipped");
-  return flippedCards.length === cards.length;
-}
+function initGame(boardWidth, boardHeight, viewTimeMs) {
+  const gameBoard = document.getElementById("sp-memory-container");
+  gameBoard.innerHTML = "";
+  gameBoard.style.gridTemplateColumns = `repeat(${boardWidth}, 1fr)`;
+  gameBoard.style.gridTemplateRows = `repeat(${boardHeight}, 1fr)`;
 
-const queryString = window.location.search;
-const urlParams = new URLSearchParams(queryString);
+  let attempts = 0;
+  let recordAttempts = localStorage.getItem("recordAttempts") || Infinity;
 
-const boardWidth = parseInt(urlParams.get("boardWidth")) || 4; // Default to 4 if not provided
-const boardHeight = parseInt(urlParams.get("boardHeight")) || 4; // Default to 4 if not provided
-const viewTime = parseInt(urlParams.get("viewTime")) * 1000 || 1000; // Convert to milliseconds
+  // Generates pairs of cards based on the board size and shuffles them
+  let cards = [];
+  for (let i = 0; i < (boardWidth * boardHeight) / 2; i++) {
+    cards.push(i);
+    cards.push(i);
+  }
+  shuffle(cards);
 
-const gameBoard = document.getElementById("memory-container");
-gameBoard.style.gridTemplateColumns = `repeat(${boardWidth}, 1fr)`;
-gameBoard.style.gridTemplateRows = `repeat(${boardHeight}, 1fr)`;
+  function checkWin() {
+    return gameBoard.querySelectorAll(".card.matched").length === cards.length;
+  }
 
-let attempts = 0;
-let recordAttempts = localStorage.getItem("recordAttempts") || Infinity;
+  let firstCard = null;
+  let frozen = false;
 
-// Generates pairs of cards based on the board size and shuffles them
-let cards = [];
-for (let i = 0; i < (boardWidth * boardHeight) / 2; i++) {
-  cards.push(i);
-  cards.push(i);
-}
+  // Create card elements and add click event listeners
+  for (let i = 0; i < cards.length; i++) {
+    const card = document.createElement("div");
+    card.classList.add("card");
+    card.dataset.value = cards[i];
+    card.innerHTML = `<img src="${imagePaths[cards[i]]}" alt="Card Image">`;
 
-shuffle(cards);
+    card.addEventListener("click", () => {
+      // Prevent clicking on already flipped cards or the same card
+      if (
+        card.classList.contains("flipped") ||
+        card.classList.contains("matched") ||
+        firstCard === card ||
+        frozen
+      )
+        return;
+      card.classList.add("flipped");
 
-let firstCard = null;
-let frozen = false;
-
-// Create card elements and add click event listeners
-for (let i = 0; i < cards.length; i++) {
-  const card = document.createElement("div");
-  card.classList.add("card");
-  card.dataset.value = cards[i];
-  card.innerHTML = `<img src="${imagePaths[cards[i]]}" alt="Card Image">`;
-
-  card.addEventListener("click", () => {
-    // Prevent clicking on already flipped cards or the same card
-    if (card.classList.contains("flipped") || firstCard === card || frozen)
-      return;
-    card.classList.add("flipped");
-
-    // If it's the first card, store it. Otherwise, check for a match.
-    if (!firstCard) {
-      firstCard = card;
-    } else {
-      attempts++;
-
-      // Check if the two flipped cards match
-      if (firstCard.dataset.value === card.dataset.value) {
-        firstCard = null;
-
-        // Check if all cards are flipped to determine if the player has won
-        if (checkWin()) {
-          setTimeout(() => {
-            alert(`Congratulations! You've won in ${attempts} attempts!`);
-            if (attempts < recordAttempts) {
-              localStorage.setItem("recordAttempts", attempts);
-            }
-          }, 500);
-        }
+      // If it's the first card, store it. Otherwise, check for a match.
+      if (!firstCard) {
+        firstCard = card;
       } else {
-        frozen = true;
-        setTimeout(() => {
-          firstCard.classList.remove("flipped");
-          card.classList.remove("flipped");
-          firstCard = null;
-          frozen = false;
-        }, viewTime);
-      }
-    }
-  });
+        attempts++;
+        const attemptsEl = document.getElementById("sp-attempts");
+        if (attemptsEl) attemptsEl.textContent = attempts;
 
-  gameBoard.appendChild(card);
+        // Check if the two flipped cards match
+        if (firstCard.dataset.value === card.dataset.value) {
+          firstCard.classList.add("matched");
+          card.classList.add("matched");
+          firstCard = null;
+
+          // Check if all cards are matched to determine if the player has won
+          if (checkWin()) {
+            setTimeout(() => {
+              alert(`Gratulerer! Du vant på ${attempts} forsøk!`);
+              if (attempts < recordAttempts) {
+                localStorage.setItem("recordAttempts", attempts);
+              }
+            }, 500);
+          }
+        } else {
+          frozen = true;
+          setTimeout(() => {
+            firstCard.classList.remove("flipped");
+            card.classList.remove("flipped");
+            firstCard = null;
+            frozen = false;
+          }, viewTimeMs);
+        }
+      }
+    });
+
+    gameBoard.appendChild(card);
+  }
+}
+
+// Auto-initialize from URL params when used standalone (game.html)
+const _autoParams = new URLSearchParams(window.location.search);
+if (_autoParams.has("boardWidth")) {
+  initGame(
+    parseInt(_autoParams.get("boardWidth")) || 4,
+    parseInt(_autoParams.get("boardHeight")) || 4,
+    (parseFloat(_autoParams.get("viewTime")) || 1) * 1000,
+  );
 }

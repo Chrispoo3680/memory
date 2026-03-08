@@ -8,6 +8,25 @@ const sunElm = document.getElementById("sun");
 const moonElm = document.getElementById("moon");
 const houseElm = document.querySelector(".fa-house");
 
+// ── Enspiller / Flerspiller selection ──
+const selectionBtns = document.querySelectorAll(".selection-btn");
+const singlePlayerMenu = document.getElementById("single-player-menu");
+const multiPlayerMenu = document.getElementById("lobby");
+
+selectionBtns[0].addEventListener("click", () => {
+  selectionBtns[0].classList.add("selected");
+  selectionBtns[1].classList.remove("selected");
+  singlePlayerMenu.classList.remove("hidden");
+  multiPlayerMenu.classList.add("hidden");
+});
+
+selectionBtns[1].addEventListener("click", () => {
+  selectionBtns[1].classList.add("selected");
+  selectionBtns[0].classList.remove("selected");
+  multiPlayerMenu.classList.remove("hidden");
+  singlePlayerMenu.classList.add("hidden");
+});
+
 clickButton.addEventListener("click", klikk);
 document.querySelector("#start-button").classList.add("none");
 function klikk() {
@@ -53,7 +72,15 @@ let viewTime = 1;
 
 const startButton = document.getElementById("start-button");
 startButton.addEventListener("click", () => {
-  window.location.href = `game.html?boardWidth=${boardWidth}&boardHeight=${boardHeight}&viewTime=${viewTime}`;
+  document.getElementById("sp-attempts").textContent = "0";
+  document.getElementById("single-player-game").classList.remove("hidden");
+  initGame(boardWidth, boardHeight, viewTime * 1000);
+});
+
+// ── Back to menu from game screen ──
+document.getElementById("sp-back-btn").addEventListener("click", () => {
+  document.getElementById("single-player-game").classList.add("hidden");
+  document.getElementById("sp-memory-container").innerHTML = "";
 });
 
 sunElm.classList.add("none");
@@ -98,4 +125,25 @@ optionElms.forEach(function (div) {
       div.classList.add("chosen2");
     }
   });
+});
+
+const singlePlayerBtn = document.querySelector(
+  "#online-selection .selection-btn:first-child",
+);
+const multiPlayerBtn = document.querySelector(
+  "#online-selection .selection-btn:last-child",
+);
+
+singlePlayerBtn.addEventListener("click", () => {
+  singlePlayerBtn.classList.add("selected");
+  multiPlayerBtn.classList.remove("selected");
+  singlePlayerMenu.classList.remove("hidden");
+  multiPlayerMenu.classList.add("hidden");
+});
+
+multiPlayerBtn.addEventListener("click", () => {
+  multiPlayerBtn.classList.add("selected");
+  singlePlayerBtn.classList.remove("selected");
+  singlePlayerMenu.classList.add("hidden");
+  multiPlayerMenu.classList.remove("hidden");
 });
