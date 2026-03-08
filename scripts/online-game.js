@@ -7,6 +7,66 @@ const PUBLIC_ANON_KEY =
 
 const supabase = createClient(SUPABASE_URL, PUBLIC_ANON_KEY);
 
+// ── Image paths (matches game-logic.js order) ────────────────────────────────
+const imagePaths = [
+  "assets/images/ball.png",
+  "assets/images/car.png",
+  "assets/images/dice.png",
+  "assets/images/donut.png",
+  "assets/images/frog.png",
+  "assets/images/pinkheart.png",
+  "assets/images/pizza.png",
+  "assets/images/planet.png",
+  "assets/images/pony.png",
+  "assets/images/poop.png",
+  "assets/images/ring.png",
+  "assets/images/star.png",
+  "assets/images/burger.png",
+  "assets/images/moon.png",
+  "assets/images/panda.png",
+  "assets/images/pig.png",
+  "assets/images/popcorn.png",
+  "assets/images/sushi.png",
+  "assets/images/taco.png",
+  "assets/images/turtle.png",
+  "assets/images/coat.png",
+  "assets/images/clown.png",
+  "assets/images/monkey.png",
+  "assets/images/house.png",
+  "assets/images/sports.png",
+  "assets/images/elf.png",
+  "assets/images/sun.png",
+  "assets/images/snowman.png",
+  "assets/images/book.png",
+  "assets/images/schoolthings.png",
+  "assets/images/noodles.png",
+  "assets/images/croissant.png",
+  "assets/images/gloriousking.png",
+  "assets/images/angrybird.png",
+  "assets/images/singer.png",
+  "assets/images/fat.png",
+  "assets/images/superman.png",
+  "assets/images/piter.png",
+  "assets/images/patatim.png",
+  "assets/images/tree.png",
+  "assets/images/universe.png",
+  "assets/images/bomb.png",
+  "assets/images/usa.png",
+  "assets/images/cutedude.png",
+  "assets/images/tomjerry.png",
+  "assets/images/baseball.png",
+  "assets/images/airpods.png",
+  "assets/images/lion.png",
+  "assets/images/github.png",
+  "assets/images/watch.png",
+  "assets/images/trophy.png",
+  "assets/images/earth.png",
+  "assets/images/motorcycle.png",
+  "assets/images/morty.png",
+  "assets/images/whale.png",
+  "assets/images/shoe.png",
+];
+
 // ── Game state ───────────────────────────────────────────────────────────────
 let playerId = null; // this player's UUID (from anonymous auth)
 let playerName = null; // this player's display name
@@ -341,14 +401,13 @@ function renderBoard(cards, flipped, width, height) {
     const isMatched = card.matched;
 
     if (isMatched) {
-      el.textContent = card.value;
+      el.innerHTML = `<img src="${imagePaths[card.value]}" alt="">`;
       el.classList.add("matched");
     } else if (isFlipped) {
-      el.textContent = card.value;
+      el.innerHTML = `<img src="${imagePaths[card.value]}" alt="">`;
       el.classList.add("flipped");
-    } else {
-      el.textContent = "?";
     }
+    // face-down: no img; question mark shown via CSS background-image
 
     if (!isMatched) {
       el.addEventListener("click", () => flipCard(card.id));

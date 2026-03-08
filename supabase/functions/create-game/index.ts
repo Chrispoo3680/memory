@@ -22,11 +22,11 @@ function buildBoard(width: number, height: number) {
   const total = width * height;
   const pairCount = total / 2;
 
-  // Use letters; cycle back if more pairs than letters
-  const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  const values: string[] = [];
+  // Use numeric image indices (client maps these to image paths)
+  const IMAGE_COUNT = 56;
+  const values: number[] = [];
   for (let i = 0; i < pairCount; i++) {
-    values.push(alphabet[i % alphabet.length]);
+    values.push(i % IMAGE_COUNT);
   }
 
   // Two of each value → shuffle

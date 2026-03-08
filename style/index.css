@@ -307,7 +307,9 @@ body.moon .levels {
 }
 
 #game-code {
+  font-family: "Courier New", Courier, monospace;
   font-size: 2.5rem;
+  font-weight: 700;
   letter-spacing: 0.25em;
   color: var(--text);
 }
@@ -434,41 +436,49 @@ body.moon .levels {
   width: 100%;
 }
 
-/* Multiplayer cards — emoji/text value style from online game */
+/* Multiplayer cards — image style matching single-player */
 .memory-card {
   aspect-ratio: 1;
-  background: var(--surface);
-  border: 2px solid var(--border);
+  background-image: url(../assets/images/question.png);
+  background-size: cover;
+  background-position: center center;
+  border: 1px solid var(--bg-dark);
   border-radius: var(--radius);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: clamp(1rem, 3vw, 1.75rem);
-  font-weight: 800;
   cursor: pointer;
-  user-select: none;
-  transition:
-    background 0.2s,
-    border-color 0.2s,
-    transform 0.15s;
+  overflow: hidden;
+  transition: transform 0.2s;
 }
 
 .memory-card:hover:not(.matched):not(.no-click) {
-  border-color: var(--accent);
-  transform: scale(1.04);
+  transform: scale(1.05);
 }
 
 .memory-card.flipped {
+  background-image: none;
   background: var(--card-flip);
   border-color: var(--card-flip);
-  color: var(--text);
 }
 
 .memory-card.matched {
+  background-image: none;
   background: var(--card-match);
   border-color: var(--card-match);
-  color: var(--text);
   cursor: default;
+}
+
+.memory-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: none;
+}
+
+.memory-card.flipped img,
+.memory-card.matched img {
+  display: block;
 }
 
 .memory-card.no-click {
