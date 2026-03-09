@@ -1,3 +1,4 @@
+// NOTE: this list must stay in sync with scripts/image-paths.js (used by online-game.js)
 const imagePaths = [
   "assets/images/ball.png",
   "assets/images/car.png",

@@ -28,6 +28,8 @@ navElm.onclick = function () {
     houseElm.style.filter = "invert(0)";
     document.querySelector("section:nth-of-type(2)").style.backgroundColor =
       "white";
-    document.querySelector("p").style.color = "black";
+    document.querySelectorAll("p").forEach(function (p) {
+      p.style.color = "black";
+    });
   }
 };

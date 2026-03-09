@@ -9,6 +9,13 @@ const CORS_HEADERS = {
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
+function json(body: unknown, status = 200) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
+  });
+}
+
 function generateCode(length = 6): string {
   const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // no ambiguous chars
   let code = "";
@@ -52,12 +59,7 @@ Deno.serve(async (req: Request) => {
     return new Response(null, { status: 204, headers: CORS_HEADERS });
   }
 
-  if (req.method !== "POST") {
-    return new Response(JSON.stringify({ error: "Method not allowed" }), {
-      status: 405,
-      headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
-    });
-  }
+  if (req.method !== "POST") return json({ error: "Method not allowed" }, 405);
 
   try {
     // Extract the calling user's UUID from the JWT
@@ -73,12 +75,7 @@ Deno.serve(async (req: Request) => {
       data: { user },
       error: authError,
     } = await supabase.auth.getUser(token);
-    if (authError || !user) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
-      });
-    }
+    if (authError || !user) return json({ error: "Unauthorized" }, 401);
 
     const {
       displayName = "Anonymous",
@@ -87,13 +84,7 @@ Deno.serve(async (req: Request) => {
     } = await req.json();
 
     if ((boardWidth * boardHeight) % 2 !== 0) {
-      return new Response(
-        JSON.stringify({ error: "Board must have an even number of cells" }),
-        {
-          status: 400,
-          headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
-        },
-      );
+      return json({ error: "Board must have an even number of cells" }, 400);
     }
 
     // Retry on code collision (very unlikely but safe)
@@ -127,15 +118,9 @@ Deno.serve(async (req: Request) => {
 
     if (error) throw error;
 
-    return new Response(JSON.stringify({ code }), {
-      status: 200,
-      headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
-    });
+    return json({ code });
   } catch (err) {
     console.error("create-game error:", err);
-    return new Response(JSON.stringify({ error: String(err) }), {
-      status: 500,
-      headers: { ...CORS_HEADERS, "Content-Type": "application/json" },
-    });
+    return json({ error: String(err) }, 500);
   }
 });

@@ -65,6 +65,9 @@ section img:first-child {
   color: var(--text);
   border: 3px solid var(--text);
   border-radius: 20px;
+  font-family: "Cherry Bomb One", system-ui;
+  font-weight: 100;
+  font-style: normal;
 }
 
 .selected {
@@ -139,11 +142,7 @@ button:hover {
 #start-button:hover {
   transform: scale(1.08);
 }
-.selection-btn {
-  font-family: "Cherry Bomb One", system-ui;
-  font-weight: 100;
-  font-style: normal;
-}
+
 .click > div {
   min-width: 50%;
   font-size: 25px;
@@ -447,18 +446,21 @@ body.moon .levels {
   background-image: url(../assets/images/question.png);
   background-size: cover;
   background-position: center center;
-  border: 1px solid var(--bg-dark);
+  border: 2px solid var(--border);
   border-radius: var(--radius);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   overflow: hidden;
-  transition: transform 0.2s;
+  transition:
+    transform 0.15s,
+    border-color 0.15s;
 }
 
-.memory-card:hover:not(.matched):not(.no-click) {
+.memory-card:hover:not(.flipped):not(.matched) {
   border-color: var(--accent);
+  transform: scale(1.04);
 }
 
 .memory-card.flipped {

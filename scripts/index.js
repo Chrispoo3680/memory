@@ -105,45 +105,10 @@ navElm.onclick = function () {
 };
 optionElms.forEach(function (div) {
   div.addEventListener("click", function () {
-    if (sunElm.classList.contains("none")) {
-      easyElm.classList.remove("chosen");
-      mediumElm.classList.remove("chosen");
-      hardElm.classList.remove("chosen");
-      easyElm.classList.remove("chosen2");
-      mediumElm.classList.remove("chosen2");
-      hardElm.classList.remove("chosen2");
-      div.classList.remove("chosen2");
-      div.classList.add("chosen");
-    } else {
-      easyElm.classList.remove("chosen2");
-      mediumElm.classList.remove("chosen2");
-      hardElm.classList.remove("chosen2");
-      easyElm.classList.remove("chosen");
-      mediumElm.classList.remove("chosen");
-      hardElm.classList.remove("chosen");
-      div.classList.remove("chosen");
-      div.classList.add("chosen2");
-    }
+    const isDark = sunElm.classList.contains("none");
+    [easyElm, mediumElm, hardElm].forEach((el) =>
+      el.classList.remove("chosen", "chosen2"),
+    );
+    div.classList.add(isDark ? "chosen" : "chosen2");
   });
-});
-
-const singlePlayerBtn = document.querySelector(
-  "#online-selection .selection-btn:first-child",
-);
-const multiPlayerBtn = document.querySelector(
-  "#online-selection .selection-btn:last-child",
-);
-
-singlePlayerBtn.addEventListener("click", () => {
-  singlePlayerBtn.classList.add("selected");
-  multiPlayerBtn.classList.remove("selected");
-  singlePlayerMenu.classList.remove("hidden");
-  multiPlayerMenu.classList.add("hidden");
-});
-
-multiPlayerBtn.addEventListener("click", () => {
-  multiPlayerBtn.classList.add("selected");
-  singlePlayerBtn.classList.remove("selected");
-  singlePlayerMenu.classList.add("hidden");
-  multiPlayerMenu.classList.remove("hidden");
 });
